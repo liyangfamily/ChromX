@@ -1,0 +1,59 @@
+# For lib TargetName Replace, (e.g. CBE_Cored/CBE_Core_debug)
+defineReplace(qtLibraryTargetName) {
+   unset(LIBRARY_NAME)
+   LIBRARY_NAME = $$1
+   CONFIG(debug, debug|release) {
+      !debug_and_release|build_pass {
+          mac:RET = $$member(LIBRARY_NAME, 0)_debug
+              else:win32:RET = $$member(LIBRARY_NAME, 0)d
+      }
+   }
+   isEmpty(RET):RET = $$LIBRARY_NAME
+   return($$RET)
+}
+
+# For lib Name Replace, (e.g. CBE_Cored3)
+defineReplace(qtLibraryName) {
+   RET = $$qtLibraryTargetName($$1)
+   win32 {
+      VERSION_LIST = $$split(MAXCONFIG_VERSION, .)
+      RET = $$RET$$first(VERSION_LIST)
+   }
+   return($$RET)
+}
+
+defineTest(minQtVersion) {
+    maj = $$1
+    min = $$2
+    patch = $$3
+    isEqual(QT_MAJOR_VERSION, $$maj) {
+        isEqual(QT_MINOR_VERSION, $$min) {
+            isEqual(QT_PATCH_VERSION, $$patch) {
+                return(true)
+            }
+            greaterThan(QT_PATCH_VERSION, $$patch) {
+                return(true)
+            }
+        }
+        greaterThan(QT_MINOR_VERSION, $$min) {
+            return(true)
+        }
+    }
+    greaterThan(QT_MAJOR_VERSION, $$maj) {
+        return(true)
+    }
+    return(false)
+}
+
+# For use in custom compilers which just copy files
+defineReplace(stripSrcDir) {
+    return($$relative_path($$absolute_path($$1, $$OUT_PWD), $$_PRO_FILE_PWD_))
+}
+
+# Replace the given Path to Native
+defineReplace(nativePath) {
+    path = $$1
+    # Replace slashes in paths with backslashes for Windows
+    win32:path ~= s,/,\\,g
+    return($$path)
+}
