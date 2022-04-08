@@ -1,24 +1,36 @@
-QT       += core gui
+include($$replace(_PRO_FILE_PWD_, ([^/]+$), \\1/\\1_dependencies.pri))
+include(../../ChromX.pri)
+include(ChromXApp.pri)
 
+QT += core gui serialport opengl openglextensions printsupport
+QT += concurrent
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+TEMPLATE = app
+#win32:RC_ICONS = Resources/Normal/ChromXApp.ico
+#osx:ICON = Resources/Normal/ChromXApp.icns
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+TARGET = $$APP_TARGET
+DESTDIR = $$PRO_BIN_PATH
 
-SOURCES += \
-    main.cpp \
-    mainwindow.cpp
+INCLUDEPATH += \
 
-HEADERS += \
-    mainwindow.h
+exists (../../.git) {
+    GIT_BRANCH   = $$system(git rev-parse --abbrev-ref HEAD)
+    GIT_SHA      = $$system(git rev-parse --short=8 HEAD)
+    GIT_TIME     = $$system(git log --pretty=format:\"%cd\" --date=format:\"%Y%m%d-%H%M%S\" -1 HEAD)
 
-FORMS += \
-    mainwindow.ui
+    GIT_BUILD_INFO = "$${GIT_SHA}-$${GIT_TIME}"
+} else {
+    GIT_BRANCH         = --
+    GIT_SHA            = --
+    GIT_TIME           = --
+    GIT_BUILD_INFO     = --
+}
+message(git time = $$GIT_TIME)
+message(git sha = $$GIT_SHA)
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+DEFINES += GIT_BUILD_SHA=\"\\\"$$GIT_SHA\\\"\"
+DEFINES += GIT_BUILD_TIME=\"\\\"$$GIT_TIME\\\"\"
+
+

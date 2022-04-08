@@ -13,7 +13,7 @@ isEmpty(PRO_LIBRARY_BASENAME) {
 # Project Source Path
 PRO_SOURCE_TREE = $$PWD
 # Project 3rdparty Path
-PRO_THREEPARTY_PATH = $$PRPO_SOURCR_TREE/3rdparty
+PRO_THREEPARTY_PATH = $$PRO_SOURCR_TREE/3rdparty
 # Project Shard File Path
 PRO_SOURCE_SHARD = $$PRO_SOURCE_TREE/shard
 # Project Scripts File Path
@@ -29,7 +29,7 @@ isEmpty(PRO_BUILD_TREE) {
 # Project Bin Path
 PRO_APP_PATH = $$PRO_BUILD_TREE/bin
 # App Target Name
-APP_TARGET   = $$PRO_ID
+APP_TARGET   = $$APP_ID
 
 osx{
     exists($$PRO_BUILD_TREE/Contents/MacOS/$$APP_TARGET): PRO_APP_BUNDLE = $$PRO_BUILD_TREE
@@ -76,8 +76,8 @@ win32{
 }
 
 # For ChromX Control Engine Inclue File Path
-CHROMX_CONTROL_ENGINE_INCLUDE= $$PRO_THREEPARTY_PATH/include/ChromXControlEngine
-INCLUDEPATH += $$CHROMX_CONTROL_ENGINE_INCLUDE
+CHROMX_CONTROL_ENGINE_INCLUDE= $$PRO_THREEPARTY_PATH/include/ChromXControlEngine
+INCLUDEPATH += $$CHROMX_CONTROL_ENGINE_INCLUDE
 
 # ChromX Dependencies Library Path
 exists($$PRO_LIBRARY_PATH): LIBS *= -L$$PRO_LIBRARY_PATH
@@ -88,7 +88,7 @@ exists($$PRO_LIBRARY_PATH): LIBS *= -L$$PRO_LIBRARY_PATH
 PRO_DEPLIB_DIRS += $$PRO_SOURCE_TREE/src
 
 # Search Assembly Dependencies of ChormX Control Engine
-PRO_DEPLIB_DIRS += $$PRO_THREEPARTY_PATH/src/ChromXControlEngine
+PRO_DEPLIB_DIRS += $$PRO_THREEPARTY_PATH/src/ChromXControlEngine
 
 # recursively resolve library deps
 done_libs =
