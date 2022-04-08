@@ -10,7 +10,7 @@ TEMPLATE = app
 #win32:RC_ICONS = Resources/Normal/ChromXApp.ico
 #osx:ICON = Resources/Normal/ChromXApp.icns
 
-TARGET = $$APP_TARGET
+TARGET = $$PRO_TARGET
 DESTDIR = $$PRO_BIN_PATH
 
 INCLUDEPATH += \
