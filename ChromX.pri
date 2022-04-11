@@ -89,7 +89,6 @@ PRO_DEPLIB_DIRS += $$PRO_SOURCE_TREE/src
 
 # Search Assembly Dependencies of ChormX Control Engine
 PRO_DEPLIB_DIRS += $$PRO_THREEPARTY_PATH/ChromXControlEngine/src
-message($$PRO_DEPLIB_DIRS)
 
 # recursively resolve library deps
 done_libs =
