@@ -29,11 +29,11 @@ isEmpty(PRO_BUILD_TREE) {
 # Project Bin Path
 PRO_APP_PATH = $$PRO_BUILD_TREE/bin
 # App Target Name
-APP_TARGET   = $$APP_ID
+PRO_TARGET   = $$APP_ID
 
 osx{
-    exists($$PRO_BUILD_TREE/Contents/MacOS/$$APP_TARGET): PRO_APP_BUNDLE = $$PRO_BUILD_TREE
-    else: PRO_APP_BUNDLE = $$PRO_APP_PATH/$${APP_TARGET}.app
+    exists($$PRO_BUILD_TREE/Contents/MacOS/$$PRO_TARGET): PRO_APP_BUNDLE = $$PRO_BUILD_TREE
+    else: PRO_APP_BUNDLE = $$PRO_APP_PATH/$${PRO_TARGET}.app
     # target output path if not set manually
     isEmpty(PRO_OUTPUT_PATH): PRO_OUTPUT_PATH = $$PRO_APP_BUNDLE/Contents
 
@@ -48,10 +48,10 @@ osx{
     # target output path if not set manually
     isEmpty(PRO_OUTPUT_PATH): PRO_OUTPUT_PATH = $$PRO_BUILD_TREE
 
-    PRO_LIBRARY_PATH = $$PRO_OUTPUT_PATH/$$PRO_LIBRARY_BASENAME/$$PRO_APP_TARGET
+    PRO_LIBRARY_PATH = $$PRO_OUTPUT_PATH/$$PRO_LIBRARY_BASENAME/$$PRO_PRO_TARGET
     PRO_PLUGIN_PATH  = $$PRO_LIBRARY_PATH/plugins
-    PRO_DATA_PATH    = $$PRO_OUTPUT_PATH/share/$$PRO_APP_TARGET
-    PRO_DOC_PATH     = $$PRO_OUTPUT_PATH/share/doc/$$PRO_APP_TARGET
+    PRO_DATA_PATH    = $$PRO_OUTPUT_PATH/share/$$PRO_PRO_TARGET
+    PRO_DOC_PATH     = $$PRO_OUTPUT_PATH/share/doc/$$PRO_PRO_TARGET
     PRO_BIN_PATH     = $$PRO_OUTPUT_PATH/bin
 
 }
