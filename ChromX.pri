@@ -13,7 +13,7 @@ isEmpty(PRO_LIBRARY_BASENAME) {
 # Project Source Path
 PRO_SOURCE_TREE = $$PWD
 # Project 3rdparty Path
-PRO_THREEPARTY_PATH = $$PRO_SOURCR_TREE/3rdparty
+PRO_THREEPARTY_PATH = $$PRO_SOURCE_TREE/3rdparty
 # Project Shard File Path
 PRO_SOURCE_SHARD = $$PRO_SOURCE_TREE/shard
 # Project Scripts File Path
@@ -76,7 +76,7 @@ win32{
 }
 
 # For ChromX Control Engine Inclue File Path
-CHROMX_CONTROL_ENGINE_INCLUDE= $$PRO_THREEPARTY_PATH/include/ChromXControlEngine
+CHROMX_CONTROL_ENGINE_INCLUDE= $$PRO_THREEPARTY_PATH/ChromXControlEngine/include
 INCLUDEPATH += $$CHROMX_CONTROL_ENGINE_INCLUDE
 
 # ChromX Dependencies Library Path
@@ -88,7 +88,8 @@ exists($$PRO_LIBRARY_PATH): LIBS *= -L$$PRO_LIBRARY_PATH
 PRO_DEPLIB_DIRS += $$PRO_SOURCE_TREE/src
 
 # Search Assembly Dependencies of ChormX Control Engine
-PRO_DEPLIB_DIRS += $$PRO_THREEPARTY_PATH/src/ChromXControlEngine
+PRO_DEPLIB_DIRS += $$PRO_THREEPARTY_PATH/ChromXControlEngine/src
+message($$PRO_DEPLIB_DIRS)
 
 # recursively resolve library deps
 done_libs =

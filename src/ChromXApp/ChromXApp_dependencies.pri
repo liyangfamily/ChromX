@@ -1,2 +1,3 @@
-QTC_LIB_DEPENDS += \
+PRO_LIB_DEPENDS += \
+    CCE_CommunicatEngine
 

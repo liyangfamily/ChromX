@@ -1,0 +1,3 @@
+[submodule "3rdparty/ChromXControlEngine"]
+	path = 3rdparty/ChromXControlEngine
+	url = git@github.com:liyangfamily/ChromXControlEngine.git
