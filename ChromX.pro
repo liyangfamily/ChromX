@@ -10,5 +10,6 @@ TEMPLATE = subdirs
 
 CONFIG += ordered
 
-SUBDIRS += src \
-    3rdparty/ChromXControlEngine
+SUBDIRS += \
+    3rdparty/ChromXControlEngine \
+    src
