@@ -1,21 +1,63 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <QMessageBox>
+#include <QTimer>
+#include <QThread>
+
 #include <CCE_Core/CCEUIHelper>
-#include <CCE_CommunicatEngine/CCEMainCtrlPackage>
+#include <CCE_CommunicatEngine/CCECluster>
+//#include <CCE_CommunicatEngine/CCEPackageDispatcher>
+
+#include <CCE_ChromXItem/CCEChromXDevice>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     qDebug()<<CCEUIHelper::appName();
-    CCEMainCtrlPackage_WriteHardwareVersion test(0x20);
-    qDebug()<<CCEUIHelper::byteArrayToHexStr(test.build().getDataToSend());
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+//    //反注册分发器监听者
+//    gDispatcher->unregisterAllDispatcherPackage();
+//    gDispatcher->unregisterAllTransitObject();
+    //通信库准备退出
+    gCluster->readyToExit();
+    int maxWait = 0;
+    while (!gCluster->canExit())
+    {
+        QCoreApplication::processEvents();
+        QThread::currentThread()->msleep(200);
+        maxWait++;
+        if (maxWait >= 150)
+        {
+            if (QMessageBox::information(0, tr("Confire Exit"),
+                                         tr("There are still some clients alive in the server. continue waiting?"),
+                                         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+                maxWait = 0;
+            else
+                break;
+        }
+    }
+}
+
+void MainWindow::on_btn_Refresh_clicked()
+{
+    gChromXMainCtrl.readHardwareVersion(true,1000);
+}
+
+void MainWindow::on_btn_Connect_clicked()
+{
+    gChromXDetectServer.autoConnect();
+}
+
+void MainWindow::on_btn_ReadHardwareVer_clicked()
+{
 }
 

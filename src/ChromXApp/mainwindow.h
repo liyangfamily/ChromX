@@ -17,5 +17,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+public slots:
+    void on_btn_Refresh_clicked();
+    void on_btn_Connect_clicked();
+    void on_btn_ReadHardwareVer_clicked();
 };
 #endif // MAINWINDOW_H
