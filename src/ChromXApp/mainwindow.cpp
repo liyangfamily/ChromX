@@ -24,9 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-//    //反注册分发器监听者
-//    gDispatcher->unregisterAllDispatcherPackage();
-//    gDispatcher->unregisterAllTransitObject();
     //通信库准备退出
     gCluster->readyToExit();
     int maxWait = 0;
@@ -49,7 +46,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btn_Refresh_clicked()
 {
-    gChromXMainCtrl.readHardwareVersion(true,1000);
+    qDebug()<<gChromXDetectServer.isConnect();
 }
 
 void MainWindow::on_btn_Connect_clicked()
@@ -59,5 +56,6 @@ void MainWindow::on_btn_Connect_clicked()
 
 void MainWindow::on_btn_ReadHardwareVer_clicked()
 {
+    gChromXMainCtrl.readHardwareVersion(true,1000);
 }
 
