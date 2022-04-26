@@ -85,12 +85,12 @@ bool App::checkConfig()
             line = line.replace("\n", "");
             QStringList list = line.split("=");
 
-            if (list.count() == 2) {
-                if (list.at(0) != "LastOpenPath"&& list.at(1) == "") {
-                    ok = false;
-                    break;
-                }
-            }
+//            if (list.count() == 2) {
+//                if (list.at(0) != "LastOpenPath"&& list.at(1) == "") {
+//                    ok = false;
+//                    break;
+//                }
+//            }
         }
     file.close();
         if (!ok) {
