@@ -11,6 +11,7 @@
 QT_BEGIN_NAMESPACE
 class QStatusBar;
 class QWidget;
+class MainWindow;
 QT_END_NAMESPACE
 
 class ICore : public QObject
