@@ -72,15 +72,42 @@ void MainWindow::on_btn_Connect_clicked()
 
 void MainWindow::on_btn_ReadHardwareVer_clicked()
 {
+#if(0)
+    /*SPIDALL*/
+    SPIDAll test;
+    test.TD_PID_P_Parma = 1;
+    test.TD_PID_I_Parma = 1;
+    test.TD_PID_D_Parma = 1;
+    test.TI_PID_P_Parma = 2;
+    test.TI_PID_I_Parma = 2;
+    test.TI_PID_D_Parma = 2;
+    test.COLUMN_PID_P_Parma = 3;
+    test.COLUMN_PID_I_Parma = 3;
+    test.COLUMN_PID_D_Parma = 3;
+
+    //quint16 ret = gChromXTestParamSet.writePIDAll(test);
+    quint16 ret = gChromXTestParamSet.readPIDAll();
+#endif
+#if(1)
+    /*RunParamSet*/
+    SRunParamSet test;
+    test.COLUMNFanCloseTemperature = 0x22CC;
+    test.testData_AutoRepo = 1;
+    //quint16 ret = gChromXTestParamSet.writeRunParam(test);
+    quint16 ret = gChromXTestParamSet.readRunParam();
+#endif
+
+
 //    gChromXMainCtrl.readHardwareVersion();
 //    gChromXMainCtrl.readARMSoftwareVersion();
 //    gChromXMainCtrl.readStartSelfTest();
 
-    gChromXSingleStatus.readTDCurTemperature(false);
-    gChromXSingleStatus.readTICurTemperature(false);
-    gChromXSingleStatus.readCOLUMNTemperature(false);
-    gChromXSingleStatus.readMicroPIDValue(false);
-    gChromXSingleStatus.readEPCPressure(false);
+//    gChromXSingleStatus.readTDCurTemperature(false);
+//    gChromXSingleStatus.readTICurTemperature(false);
+//    gChromXSingleStatus.readCOLUMNTemperature(false);
+//    gChromXSingleStatus.readMicroPIDValue(false);
+//    gChromXSingleStatus.readEPCPressure(false);
+    ICore::showMessageCCEAPIResult(ret);
 }
 
 void MainWindow::on_btnReadHardVer_clicked()
