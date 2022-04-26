@@ -2,7 +2,7 @@ include($$replace(_PRO_FILE_PWD_, ([^/]+$), \\1/\\1_dependencies.pri))
 include(../../ChromX.pri)
 include(ChromXApp.pri)
 
-QT += core gui serialport opengl openglextensions printsupport
+QT += core gui network serialport opengl openglextensions printsupport
 QT += concurrent
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
