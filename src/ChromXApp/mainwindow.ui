@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1048</width>
-    <height>846</height>
+    <width>815</width>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -78,7 +78,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -233,24 +233,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="3">
-                 <widget class="QRadioButton" name="radioBtnLEDLight1ON">
-                  <property name="text">
-                   <string>ON</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="4" column="0">
                  <widget class="QLabel" name="labelLEDLight">
                   <property name="text">
                    <string>Light</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="2">
-                 <widget class="QRadioButton" name="radioBtnLEDLight4OFF">
-                  <property name="text">
-                   <string>OFF</string>
                   </property>
                  </widget>
                 </item>
@@ -341,20 +327,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="3">
-                 <widget class="QRadioButton" name="radioBtnLEDLight2ON">
-                  <property name="text">
-                   <string>ON</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2">
-                 <widget class="QRadioButton" name="radioBtnLEDLight2OFF">
-                  <property name="text">
-                   <string>OFF</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="2" column="1">
                  <widget class="QLabel" name="labelLEDSamplingPump">
                   <property name="text">
@@ -389,13 +361,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="3">
-                 <widget class="QRadioButton" name="radioBtnLEDLight3ON">
-                  <property name="text">
-                   <string>ON</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="4">
                  <widget class="QPushButton" name="btnReadLEDHardVer">
                   <property name="text">
@@ -410,13 +375,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="2">
-                 <widget class="QRadioButton" name="radioBtnLEDLight5OFF">
-                  <property name="text">
-                   <string>OFF</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="5" column="1">
                  <widget class="QLabel" name="labelLEDLight1">
                   <property name="text">
@@ -428,13 +386,6 @@
                  <widget class="QLabel" name="labelLEDEnvHumidity">
                   <property name="text">
                    <string>Humidity</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QRadioButton" name="radioBtnLEDLight1OFF">
-                  <property name="text">
-                   <string>OFF</string>
                   </property>
                  </widget>
                 </item>
@@ -459,31 +410,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="3">
-                 <widget class="QRadioButton" name="radioBtnLEDLight5ON">
-                  <property name="text">
-                   <string>ON</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="3">
-                 <widget class="QRadioButton" name="radioBtnLEDLight4ON">
-                  <property name="text">
-                   <string>ON</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="7" column="1">
                  <widget class="QLabel" name="labelLEDLight3">
                   <property name="text">
                    <string>Light3</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="2">
-                 <widget class="QRadioButton" name="radioBtnLEDLight3OFF">
-                  <property name="text">
-                   <string>OFF</string>
                   </property>
                  </widget>
                 </item>
@@ -553,6 +483,196 @@
                   <property name="text">
                    <string>Write</string>
                   </property>
+                 </widget>
+                </item>
+                <item row="5" column="2" colspan="2">
+                 <widget class="QFrame" name="frame_11">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight1OFF">
+                     <property name="text">
+                      <string>OFF</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight1ON">
+                     <property name="text">
+                      <string>ON</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="6" column="2" colspan="2">
+                 <widget class="QFrame" name="frame_12">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_7">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight2OFF">
+                     <property name="text">
+                      <string>OFF</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight2ON">
+                     <property name="text">
+                      <string>ON</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="7" column="2" colspan="2">
+                 <widget class="QFrame" name="frame_13">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight3OFF">
+                     <property name="text">
+                      <string>OFF</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight3ON">
+                     <property name="text">
+                      <string>ON</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="8" column="2" colspan="2">
+                 <widget class="QFrame" name="frame_14">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight4OFF">
+                     <property name="text">
+                      <string>OFF</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight4ON">
+                     <property name="text">
+                      <string>ON</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="9" column="2" colspan="2">
+                 <widget class="QFrame" name="frame_15">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight5OFF">
+                     <property name="text">
+                      <string>OFF</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioBtnLEDLight5ON">
+                     <property name="text">
+                      <string>ON</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                </layout>
@@ -1207,7 +1327,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1048</width>
+     <width>815</width>
      <height>23</height>
     </rect>
    </property>
