@@ -39,6 +39,28 @@ public slots:
     void on_btnWriteLEDLight_clicked();
     void on_btnReadEnvironment_clicked();
 
+    //Single Ctrl
+    void on_btnWritePumpVoltage_clicked();
+    void on_btnWriteSampleValve_clicked();
+    void on_btnWriteDetectValve_clicked();
+    void on_btnWriteFan_clicked();
+    void on_btnWriteTDModule_clicked();
+    void on_btnWriteTIModule_clicked();
+    void on_btnWriteCOLUMNModule_clicked();
+    void on_btnWriteMicroPIDModule_clicked();
+    void on_btnWriteEPCVoltage_clicked();
+    void on_btnWriteEPCSwitch_clicked();
+    void on_btnReadPumpVoltage_clicked();
+    void on_btnReadSampleValve_clicked();
+    void on_btnReadDetectValve_clicked();
+    void on_btnReadFan_clicked();
+    void on_btnReadTDModule_clicked();
+    void on_btnReadTIModule_clicked();
+    void on_btnReadCOLUMNModule_clicked();
+    void on_btnReadMicroPIDModule_clicked();
+    void on_btnReadEPCVoltage_clicked();
+    void on_btnReadEPCSwitch_clicked();
+
     //Single Status
     void on_btnReadTDTemperature_clicked();
     void on_btnReadTITemperature_clicked();
