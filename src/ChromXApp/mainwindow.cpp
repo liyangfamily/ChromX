@@ -186,6 +186,194 @@ void MainWindow::on_btnReadEnvironment_clicked()
     ui->spinBoxEnvPressure->setValue(gChromXLEDPanelUnit.getEnvPressure());
 }
 
+
+//***************************************************3、单控控制单元（0x12）按钮事件***************************************************************/
+void MainWindow::on_btnWritePumpVoltage_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writePumpVoltage(ui->spinBoxPumpVoltage->value());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteSampleValve_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeSampleValve(ui->radioBtnSampleValveON->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteDetectValve_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeDetectValve(ui->radioBtnDetectValveON->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteFan_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeFan(ui->radioBtnFanON->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteTDModule_clicked()
+{
+    SSingleDeviceCtrl TDModule;
+    TDModule.startTime = ui->spinBoxTDStartTime->value();
+    TDModule.PWMValue = ui->spinBoxTDPWM->value();
+    TDModule.startSwitch = ui->radioBtnTDON->isChecked();
+    quint16 ret = gChromXSingleCtrl.writeTDModule(TDModule.startTime, TDModule.PWMValue,
+                                                  TDModule.startSwitch);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteTIModule_clicked()
+{
+    SSingleDeviceCtrl TIModule;
+    TIModule.startTime = ui->spinBoxTIStartTime->value();
+    TIModule.PWMValue = ui->spinBoxTIPWM->value();
+    TIModule.startSwitch = ui->radioBtnTION->isChecked();
+    quint16 ret = gChromXSingleCtrl.writeTIModule(TIModule.startTime, TIModule.PWMValue,
+                                                  TIModule.startSwitch);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteCOLUMNModule_clicked()
+{
+    SSingleDeviceCtrl COLUMNModule;
+    COLUMNModule.startTime = ui->spinBoxCOLUMNStartTime->value();
+    COLUMNModule.PWMValue = ui->spinBoxCOLUMNPWM->value();
+    COLUMNModule.startSwitch = ui->radioBtnCOLUMNON->isChecked();
+    quint16 ret = gChromXSingleCtrl.writeCOLUMNModule(COLUMNModule.startTime, COLUMNModule.PWMValue,
+                                                      COLUMNModule.startSwitch);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteMicroPIDModule_clicked()
+{
+    SSingleMicroPIDCtrl microPIDModule;
+    microPIDModule.biasVoltage = ui->spinBoxMicroPIDBiasVoltage->value();
+    microPIDModule.freq = ui->spinBoxMicroPIDFreq->value();
+    microPIDModule.startSwitch = ui->radioBtnMicroPIDON->isChecked();
+    quint16 ret = gChromXSingleCtrl.writeMicroPIDModule(microPIDModule.biasVoltage,
+                                                        microPIDModule.freq, microPIDModule.startSwitch);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteEPCVoltage_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeEPCVoltage(ui->spinBoxEPCVoltage->value());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnWriteEPCSwitch_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeEPCSwitch(ui->radioBtnEPCON->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btnReadPumpVoltage_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readPumpVoltage();
+    ICore::showMessageCCEAPIResult(ret);
+    ui->spinBoxPumpVoltage_Read->setValue(gChromXSingleCtrl.getPumpVoltage());
+}
+
+void MainWindow::on_btnReadSampleValve_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readSampleValve();
+    ICore::showMessageCCEAPIResult(ret);
+    if(gChromXSingleCtrl.getSampleValve() == 1)
+        ui->radioBtnSampleValveON_Read->setChecked(true);
+    if(gChromXSingleCtrl.getSampleValve() == 0)
+        ui->radioBtnSampleValveOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadDetectValve_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readDetectValve();
+    ICore::showMessageCCEAPIResult(ret);
+    if(gChromXSingleCtrl.getDetectValve() == 1)
+        ui->radioBtnDetectValveON_Read->setChecked(true);
+    if(gChromXSingleCtrl.getDetectValve() == 0)
+        ui->radioBtnDetectValveOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadFan_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readFan();
+    ICore::showMessageCCEAPIResult(ret);
+    if(gChromXSingleCtrl.getFan() == 1)
+        ui->radioBtnFanON_Read->setChecked(true);
+    if(gChromXSingleCtrl.getFan() == 0)
+        ui->radioBtnFanOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadTDModule_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readTDModule();
+    ICore::showMessageCCEAPIResult(ret);
+    ui->spinBoxTDStartTime_Read->setValue(gChromXSingleCtrl.getTDAllData().startTime);
+    ui->spinBoxTDPWM_Read->setValue(gChromXSingleCtrl.getTDAllData().PWMValue);
+
+    if (gChromXSingleCtrl.getTDAllData().startSwitch == 1)
+        ui->radioBtnTDON_Read->setChecked(true);
+    if (gChromXSingleCtrl.getTDAllData().startSwitch == 0)
+        ui->radioBtnTDOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadTIModule_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readTIModule();
+    ICore::showMessageCCEAPIResult(ret);
+    ui->spinBoxTIStartTime_Read->setValue(gChromXSingleCtrl.getTIAllData().startTime);
+    ui->spinBoxTIPWM_Read->setValue(gChromXSingleCtrl.getTIAllData().PWMValue);
+
+    if (gChromXSingleCtrl.getTIAllData().startSwitch == 1)
+        ui->radioBtnTION_Read->setChecked(true);
+    if (gChromXSingleCtrl.getTIAllData().startSwitch == 0)
+        ui->radioBtnTIOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadCOLUMNModule_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readCOLUMNModule();
+    ICore::showMessageCCEAPIResult(ret);
+    ui->spinBoxCOLUMNStartTime_Read->setValue(gChromXSingleCtrl.getCOLUMNAllData().startTime);
+    ui->spinBoxCOLUMNPWM_Read->setValue(gChromXSingleCtrl.getCOLUMNAllData().PWMValue);
+
+    if (gChromXSingleCtrl.getCOLUMNAllData().startSwitch == 1)
+        ui->radioBtnCOLUMNON_Read->setChecked(true);
+    if (gChromXSingleCtrl.getCOLUMNAllData().startSwitch == 0)
+        ui->radioBtnCOLUMNOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadMicroPIDModule_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readMicroPIDModule();
+    ICore::showMessageCCEAPIResult(ret);
+    ui->spinBoxMicroPIDBiasVoltage_Read->setValue(gChromXSingleCtrl.getMicroPIDAllData().biasVoltage);
+    ui->spinBoxMicroPIDFreq_Read->setValue(gChromXSingleCtrl.getMicroPIDAllData().freq);
+    if (gChromXSingleCtrl.getMicroPIDAllData().startSwitch == 1)
+        ui->radioBtnMicroPIDON_Read->setChecked(true);
+    if (gChromXSingleCtrl.getMicroPIDAllData().startSwitch == 0)
+        ui->radioBtnMicroPIDOFF_Read->setChecked(true);
+}
+
+void MainWindow::on_btnReadEPCVoltage_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readEPCVoltage();
+    ICore::showMessageCCEAPIResult(ret);
+    ui->spinBoxEPCVoltage_Read->setValue(gChromXSingleCtrl.getEPCVoltage());
+}
+
+void MainWindow::on_btnReadEPCSwitch_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.readEPCSwitch();
+    ICore::showMessageCCEAPIResult(ret);
+    if(gChromXSingleCtrl.getEPCSwitch() == 1)
+        ui->radioBtnEPCON_Read->setChecked(true);
+    if(gChromXSingleCtrl.getEPCSwitch() == 0)
+        ui->radioBtnEPCOFF_Read->setChecked(true);
+}
+
+//***************************************************4、单控状态单元（0x13）按钮事件***************************************************************/
 void MainWindow::on_btnReadTDTemperature_clicked()
 {
     quint16 ret = gChromXSingleStatus.readTDCurTemperature();

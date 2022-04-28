@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>815</width>
-    <height>608</height>
+    <width>1138</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -686,6 +686,1018 @@
           <attribute name="title">
            <string>Single Ctrl</string>
           </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_16">
+           <item>
+            <widget class="QFrame" name="Settings">
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
+               <widget class="QGroupBox" name="groupBox_4">
+                <property name="title">
+                 <string>Settings</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_14">
+                 <item row="0" column="5">
+                  <widget class="QLabel" name="labelStartTime_2">
+                   <property name="text">
+                    <string>PWM</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="8">
+                  <widget class="QLabel" name="labelEPCVoltage">
+                   <property name="text">
+                    <string>EPCVoltage</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="3">
+                  <widget class="QLabel" name="labelCOLUMN">
+                   <property name="text">
+                    <string>COLUMN</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="7">
+                  <widget class="QPushButton" name="btnWriteCOLUMNModule">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="7">
+                  <widget class="QPushButton" name="btnWriteTIModule">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="8">
+                  <widget class="QLabel" name="labelEPCSwitch">
+                   <property name="text">
+                    <string>EPCSwitch</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="9" colspan="3">
+                  <widget class="QSpinBox" name="spinBoxEPCVoltage">
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4">
+                  <widget class="QLabel" name="labelStartTime">
+                   <property name="text">
+                    <string>StartTime</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="5">
+                  <widget class="QSpinBox" name="spinBoxTIPWM">
+                   <property name="suffix">
+                    <string>（%）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QPushButton" name="btnWriteFan">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="12">
+                  <widget class="QPushButton" name="btnWriteEPCSwitch">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="labelTD_9">
+                   <property name="text">
+                    <string>DetectValve</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="10">
+                  <widget class="QLabel" name="labelMicroPID_3">
+                   <property name="text">
+                    <string>Frequency</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="5">
+                  <widget class="QSpinBox" name="spinBoxCOLUMNPWM">
+                   <property name="suffix">
+                    <string>（%）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="7">
+                  <widget class="QPushButton" name="btnWriteTDModule">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="8">
+                  <widget class="QLabel" name="labelMicroPID">
+                   <property name="text">
+                    <string>MicroPID</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="labelTD_7">
+                   <property name="text">
+                    <string>SampleValve</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="11">
+                  <widget class="QLabel" name="labelMicroPID_4">
+                   <property name="text">
+                    <string>Switch</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="3">
+                  <widget class="QLabel" name="labelTD">
+                   <property name="text">
+                    <string>TD</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="12">
+                  <widget class="QPushButton" name="btnWriteMicroPIDModule">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QFrame" name="sampleValveSwitch_2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_42">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnSampleValveON">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnSampleValveOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="spinBoxPumpVoltage">
+                   <property name="suffix">
+                    <string>（%）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="9">
+                  <widget class="QSpinBox" name="spinBoxMicroPIDBiasVoltage">
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QPushButton" name="btnWriteDetectValve">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="labelTD_8">
+                   <property name="maximumSize">
+                    <size>
+                     <width>76</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>PumpVoltage</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="10">
+                  <widget class="QSpinBox" name="spinBoxMicroPIDFreq">
+                   <property name="suffix">
+                    <string>（100Hz）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="5">
+                  <widget class="QSpinBox" name="spinBoxTDPWM">
+                   <property name="suffix">
+                    <string>（%）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QPushButton" name="btnWritePumpVoltage">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="11">
+                  <widget class="QFrame" name="microPIDSwitch_2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_34">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnMicroPIDON">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnMicroPIDOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QFrame" name="detectValveSwitch_2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_43">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnDetectValveON">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnDetectValveOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QFrame" name="fanSwitch_2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_44">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnFanON">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnFanOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QPushButton" name="btnWriteSampleValve">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="6">
+                  <widget class="QLabel" name="labelStartTime_3">
+                   <property name="text">
+                    <string>Switch</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="labelTD_10">
+                   <property name="text">
+                    <string>Fan</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="9" colspan="3">
+                  <widget class="QFrame" name="EPCSwitch_2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_36">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnEPCON">
+                      <property name="layoutDirection">
+                       <enum>Qt::LeftToRight</enum>
+                      </property>
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnEPCOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="12">
+                  <widget class="QPushButton" name="btnWriteEPCVoltage">
+                   <property name="text">
+                    <string>Write</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="9">
+                  <widget class="QLabel" name="labelMicroPID_2">
+                   <property name="text">
+                    <string>BiasVoltage</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="3">
+                  <widget class="QLabel" name="labelTI">
+                   <property name="text">
+                    <string>TI</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="4">
+                  <widget class="QSpinBox" name="spinBoxTIStartTime">
+                   <property name="suffix">
+                    <string>（s）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="4">
+                  <widget class="QSpinBox" name="spinBoxTDStartTime">
+                   <property name="suffix">
+                    <string>（s）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="4">
+                  <widget class="QSpinBox" name="spinBoxCOLUMNStartTime">
+                   <property name="suffix">
+                    <string>（s）</string>
+                   </property>
+                   <property name="maximum">
+                    <number>65535</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="6">
+                  <widget class="QFrame" name="TDSwitch">
+                   <layout class="QHBoxLayout" name="horizontalLayout_61">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnTDON">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnTDOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="6">
+                  <widget class="QFrame" name="TISwitch">
+                   <layout class="QHBoxLayout" name="horizontalLayout_62">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnTION">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnTIOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="6">
+                  <widget class="QFrame" name="COLUMNSwitch">
+                   <layout class="QHBoxLayout" name="horizontalLayout_63">
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnCOLUMNON">
+                      <property name="text">
+                       <string>ON</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radioBtnCOLUMNOFF">
+                      <property name="text">
+                       <string>OFF</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="MCUSettings">
+             <property name="title">
+              <string>Current Settings in MCU</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_19">
+              <item row="2" column="5">
+               <widget class="QSpinBox" name="spinBoxTDPWM_Read">
+                <property name="suffix">
+                 <string>（%）</string>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLabel" name="labelTD_4">
+                <property name="text">
+                 <string>TD</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="4">
+               <widget class="QSpinBox" name="spinBoxTDStartTime_Read">
+                <property name="suffix">
+                 <string>（s）</string>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="labelTD_19">
+                <property name="text">
+                 <string>DetectValve</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="spinBoxPumpVoltage_Read">
+                <property name="suffix">
+                 <string>（%）</string>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <widget class="QLabel" name="labelStartTime_12">
+                <property name="text">
+                 <string>Switch</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="8">
+               <widget class="QLabel" name="labelMicroPID_10">
+                <property name="text">
+                 <string>MicroPID</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelTD_18">
+                <property name="text">
+                 <string>PumpVoltage</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="12">
+               <widget class="QPushButton" name="btnReadEPCSwitch">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="12">
+               <widget class="QPushButton" name="btnReadEPCVoltage">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="9" colspan="3">
+               <widget class="QSpinBox" name="spinBoxEPCVoltage_Read">
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QPushButton" name="btnReadPumpVoltage">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="5">
+               <widget class="QSpinBox" name="spinBoxCOLUMNPWM_Read">
+                <property name="suffix">
+                 <string>（%）</string>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QLabel" name="labelTI_4">
+                <property name="text">
+                 <string>TI</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="4">
+               <widget class="QSpinBox" name="spinBoxCOLUMNStartTime_Read">
+                <property name="suffix">
+                 <string>（s）</string>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="labelTD_20">
+                <property name="text">
+                 <string>Fan</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="8">
+               <widget class="QLabel" name="labelEPCSwitch_3">
+                <property name="text">
+                 <string>EPCSwitch</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="7">
+               <widget class="QPushButton" name="btnReadTDModule">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="9">
+               <widget class="QLabel" name="labelMicroPID_12">
+                <property name="text">
+                 <string>BiasVoltage</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="10">
+               <widget class="QSpinBox" name="spinBoxMicroPIDFreq_Read">
+                <property name="suffix">
+                 <string>（100Hz）</string>
+                </property>
+                <property name="prefix">
+                 <string/>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QLabel" name="labelStartTime_11">
+                <property name="text">
+                 <string>StartTime</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="12">
+               <widget class="QPushButton" name="btnReadMicroPIDModule">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <widget class="QSpinBox" name="spinBoxTIStartTime_Read">
+                <property name="suffix">
+                 <string>（s）</string>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="9">
+               <widget class="QSpinBox" name="spinBoxMicroPIDBiasVoltage_Read">
+                <property name="maximum">
+                 <number>65535</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labelTD_17">
+                <property name="text">
+                 <string>SampleValve</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QLabel" name="labelCOLUMN_4">
+                <property name="text">
+                 <string>COLUMN</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QPushButton" name="btnReadSampleValve">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="7">
+               <widget class="QPushButton" name="btnReadCOLUMNModule">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QPushButton" name="btnReadFan">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="5">
+               <widget class="QSpinBox" name="spinBoxTIPWM_Read">
+                <property name="suffix">
+                 <string>（%）</string>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="10">
+               <widget class="QLabel" name="labelMicroPID_9">
+                <property name="text">
+                 <string>Frequency</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="11">
+               <widget class="QLabel" name="labelMicroPID_11">
+                <property name="text">
+                 <string>Switch</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QLabel" name="labelStartTime_10">
+                <property name="text">
+                 <string>PWM</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QPushButton" name="btnReadDetectValve">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="7">
+               <widget class="QPushButton" name="btnReadTIModule">
+                <property name="text">
+                 <string>Read</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="8">
+               <widget class="QLabel" name="labelEPCVoltage_3">
+                <property name="text">
+                 <string>EPCVoltage</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="9" colspan="3">
+               <widget class="QFrame" name="EPCSwitch">
+                <layout class="QHBoxLayout" name="horizontalLayout_39">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnEPCON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnEPCOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QFrame" name="fanSwitch">
+                <layout class="QHBoxLayout" name="horizontalLayout_55">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnFanON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnFanOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QFrame" name="detectValveSwitch">
+                <layout class="QHBoxLayout" name="horizontalLayout_54">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnDetectValveON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnDetectValveOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="11">
+               <widget class="QFrame" name="microPIDSwitch">
+                <layout class="QHBoxLayout" name="horizontalLayout_40">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnMicroPIDON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnMicroPIDOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QFrame" name="sampleValveSwitch">
+                <layout class="QHBoxLayout" name="horizontalLayout_53">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnSampleValveON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnSampleValveOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="6">
+               <widget class="QFrame" name="TDSwitch_2">
+                <layout class="QHBoxLayout" name="horizontalLayout_64">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnTDON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnTDOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="3" column="6">
+               <widget class="QFrame" name="TISwitch_2">
+                <layout class="QHBoxLayout" name="horizontalLayout_65">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnTION_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnTIOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="4" column="6">
+               <widget class="QFrame" name="COLUMNSwitch_2">
+                <layout class="QHBoxLayout" name="horizontalLayout_66">
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnCOLUMNON_Read">
+                   <property name="text">
+                    <string>ON</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioBtnCOLUMNOFF_Read">
+                   <property name="text">
+                    <string>OFF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="tab_4">
           <attribute name="title">
@@ -1327,7 +2339,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>815</width>
+     <width>1138</width>
      <height>23</height>
     </rect>
    </property>
