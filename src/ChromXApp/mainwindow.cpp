@@ -14,10 +14,9 @@
 
 #include <CCE_Core/CCEUIHelper>
 #include <CCE_CommunicatEngine/CCECluster>
-//#include <CCE_CommunicatEngine/CCEPackageDispatcher>
 
 #include <CCE_ChromXItem/CCEChromXDevice>
-
+#include <JsonHelper/CXAJsonRunParamSet.h>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -70,8 +69,14 @@ void MainWindow::on_btn_Connect_clicked()
     }
 }
 
-void MainWindow::on_btn_ReadHardwareVer_clicked()
+void MainWindow::on_btn_ReadTest_clicked()
 {
+#if(1)
+    CXAJsonTestParamSet test;
+    test.readJsonFrom("D:/Test/1.json");
+    STestParamSet data = test.testParam();
+    int i=0;
+#endif
 #if(0)
     /*SPIDALL*/
     SPIDAll test;
@@ -88,7 +93,7 @@ void MainWindow::on_btn_ReadHardwareVer_clicked()
     //quint16 ret = gChromXTestParamSet.writePIDAll(test);
     quint16 ret = gChromXTestParamSet.readPIDAll();
 #endif
-#if(1)
+#if(0)
     /*RunParamSet*/
     SRunParamSet test;
     test.COLUMNFanCloseTemperature = 0x22CC;
@@ -107,7 +112,23 @@ void MainWindow::on_btn_ReadHardwareVer_clicked()
 //    gChromXSingleStatus.readCOLUMNTemperature(false);
 //    gChromXSingleStatus.readMicroPIDValue(false);
 //    gChromXSingleStatus.readEPCPressure(false);
-    ICore::showMessageCCEAPIResult(ret);
+    //ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_btn_WriteTest_clicked()
+{
+    SRunParamSet data;
+    data.COLUMNFanCloseTemperature = 65535;
+    data.TICtrl.BeforeTIStartup_MicroPIDValue_Min = 0xFFFFFFFF;
+    data.microPIDCtrl.samplingFreq = 50;
+
+    STestParamSet testData;
+    testData.runParamSet = data;
+
+    CXAJsonTestParamSet test;
+    test.setName("hahaha");
+    test.setTestParam(testData);
+    test.saveJsonAs("D:/Test/1.json");
 }
 
 void MainWindow::on_btnReadHardVer_clicked()

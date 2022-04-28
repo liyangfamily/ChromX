@@ -42,12 +42,19 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_ReadHardwareVer">
+        <widget class="QPushButton" name="btn_ReadTest">
          <property name="focusPolicy">
           <enum>Qt::StrongFocus</enum>
          </property>
          <property name="text">
-          <string>Read Hardware Version</string>
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_WriteTest">
+         <property name="text">
+          <string>Write</string>
          </property>
         </widget>
        </item>
@@ -2347,7 +2354,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
-  <tabstop>btn_ReadHardwareVer</tabstop>
+  <tabstop>btn_ReadTest</tabstop>
   <tabstop>btn_Connect</tabstop>
   <tabstop>btn_Refresh</tabstop>
  </tabstops>

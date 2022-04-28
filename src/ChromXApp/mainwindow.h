@@ -24,7 +24,8 @@ public slots:
 
     void on_btn_Refresh_clicked();
     void on_btn_Connect_clicked();
-    void on_btn_ReadHardwareVer_clicked();
+    void on_btn_ReadTest_clicked();
+    void on_btn_WriteTest_clicked();
     //Main Ctrl
     void on_btnReadHardVer_clicked();
     void on_btnWriteHardVer_clicked();
