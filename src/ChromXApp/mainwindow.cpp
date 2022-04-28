@@ -16,7 +16,7 @@
 #include <CCE_CommunicatEngine/CCECluster>
 
 #include <CCE_ChromXItem/CCEChromXDevice>
-#include <JsonHelper/CXAJsonRunParamSet.h>
+#include <JsonHelper/cxajsontestparamset.h>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)

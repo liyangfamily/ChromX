@@ -1,4 +1,4 @@
-﻿#include "CXAJsonRunParamSet.h"
+﻿#include "cxajsontestparamset.h"
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonObject>
