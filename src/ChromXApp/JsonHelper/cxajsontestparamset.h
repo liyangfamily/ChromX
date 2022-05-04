@@ -174,6 +174,11 @@ public:
     CXAJsonTestParamSet(){};
     CXAJsonTestParamSet(const STestParamSet& value);
     void setName(QString name){m_name = name;}
+    QString name(){return m_name;}
+    EVersion versin(){return m_version;}
+    QString creatDataTime(){return m_creatDataTime;}
+    QString modifyDataTime(){return m_modifDataTime;}
+
     void setTestParam(const STestParamSet& value);
     STestParamSet testParam() const{
         return m_data;
