@@ -29,7 +29,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,1">
@@ -49,7 +49,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="lineEdit_configName">
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -63,12 +63,12 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBox">
+             <widget class="QSpinBox" name="spinBox_cleaningTime">
               <property name="suffix">
                <string/>
               </property>
               <property name="maximum">
-               <number>5000</number>
+               <number>65535</number>
               </property>
              </widget>
             </item>
@@ -80,12 +80,12 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="spinBox_2">
+             <widget class="QSpinBox" name="spinBox_samplingTime">
               <property name="suffix">
                <string/>
               </property>
               <property name="maximum">
-               <number>5000</number>
+               <number>65535</number>
               </property>
              </widget>
             </item>
@@ -97,12 +97,12 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QSpinBox" name="spinBox_3">
+             <widget class="QSpinBox" name="spinBox_samplingPumpVolt">
               <property name="suffix">
                <string/>
               </property>
               <property name="maximum">
-               <number>12</number>
+               <number>100</number>
               </property>
              </widget>
             </item>
@@ -114,7 +114,7 @@
              </widget>
             </item>
             <item row="4" column="1">
-             <widget class="QSpinBox" name="spinBox_4">
+             <widget class="QSpinBox" name="spinBox_EPCControlVolt">
               <property name="maximum">
                <number>65535</number>
               </property>
@@ -132,14 +132,14 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="btn_PIDSetRead">
                 <property name="text">
                  <string>Read</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_2">
+               <widget class="QPushButton" name="btn_PIDSetWrite">
                 <property name="text">
                  <string>Save</string>
                 </property>
@@ -247,65 +247,92 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TD_P">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TI_P">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_COLUMN_P">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TD_I">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="2" column="2">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TI_I">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="3" column="2">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_COLUMN_I">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="1" column="3">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TD_D">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="2" column="3">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_8">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TI_D">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
               <item row="3" column="3">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_9">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_COLUMN_D">
                 <property name="decimals">
                  <number>3</number>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
                 </property>
                </widget>
               </item>
@@ -328,7 +355,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBox_5"/>
+             <widget class="QSpinBox" name="spinBox_baseLineVolt">
+              <property name="maximum">
+               <number>65535</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_13">
@@ -338,7 +369,11 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBox_6"/>
+             <widget class="QSpinBox" name="spinBox_plasmaFreq">
+              <property name="maximum">
+               <number>65535</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_14">
@@ -348,7 +383,11 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="spinBox_7"/>
+             <widget class="QSpinBox" name="spinBox_samplingFreq">
+              <property name="maximum">
+               <number>255</number>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -394,9 +433,12 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_8">
+               <widget class="QSpinBox" name="spinBox_COLUMNFanCloseTemperature">
                 <property name="suffix">
                  <string>℃</string>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
                 </property>
                </widget>
               </item>
@@ -418,49 +460,49 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <widget class="QPushButton" name="pushButton_3">
+               <widget class="QPushButton" name="btn_Run">
                 <property name="text">
                  <string>Run</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_4">
+               <widget class="QPushButton" name="btn_Stop">
                 <property name="text">
                  <string>Stop</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_5">
+               <widget class="QPushButton" name="btn_Reset">
                 <property name="text">
                  <string>Reset</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_6">
+               <widget class="QPushButton" name="btn_SaveASDefault">
                 <property name="text">
                  <string>Set as clinical default</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_7">
+               <widget class="QPushButton" name="btn_SaveAs">
                 <property name="text">
                  <string>Set as template</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_8">
+               <widget class="QPushButton" name="btn_ImportTemplate">
                 <property name="text">
                  <string>Import template</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_9">
+               <widget class="QPushButton" name="btn_ToChart">
                 <property name="text">
                  <string>Chart</string>
                 </property>
@@ -482,7 +524,7 @@
               <item row="3" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
-                 <widget class="QCheckBox" name="checkBox_2">
+                 <widget class="QCheckBox" name="checkBox_TD_TestTITemper">
                   <property name="text">
                    <string>TI</string>
                   </property>
@@ -507,22 +549,22 @@
                </layout>
               </item>
               <item row="2" column="0">
-               <widget class="QCheckBox" name="checkBox">
+               <widget class="QCheckBox" name="checkBox_TD_TestPcg">
                 <property name="text">
                  <string>Pcg</string>
                 </property>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="comboBox">
+               <widget class="QComboBox" name="comboBox_TD_Mode">
                 <item>
                  <property name="text">
-                  <string>PID Auto Control Temperature</string>
+                  <string>Non-PID Auto Control Temperature</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Non-PID Auto Control Temperature</string>
+                  <string>PID Auto Control Temperature</string>
                  </property>
                 </item>
                </widget>
@@ -530,24 +572,38 @@
               <item row="2" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <item>
-                 <widget class="QSpinBox" name="spinBox_9"/>
+                 <widget class="QSpinBox" name="spinBox_TD_LowLimit">
+                  <property name="maximum">
+                   <number>65535</number>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_19">
                   <property name="text">
                    <string>to</string>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="spinBox_10"/>
+                 <widget class="QSpinBox" name="spinBox_TD_UpLimit">
+                  <property name="maximum">
+                   <number>65535</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
               <item row="3" column="1">
-               <widget class="QSpinBox" name="spinBox_11">
+               <widget class="QSpinBox" name="spinBox_TD_TITemperMax">
                 <property name="suffix">
                  <string>℃</string>
+                </property>
+                <property name="maximum">
+                 <number>65535</number>
                 </property>
                </widget>
               </item>
@@ -587,7 +643,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="tableWidget">
+             <widget class="QTableWidget" name="tableWidgetTD">
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
@@ -636,6 +692,16 @@
                 <string>Rate(℃/min)</string>
                </property>
               </column>
+              <column>
+               <property name="text">
+                <string>t(s)</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>PWM(%)</string>
+               </property>
+              </column>
              </widget>
             </item>
            </layout>
@@ -649,23 +715,16 @@
            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,3">
             <item>
              <layout class="QGridLayout" name="gridLayout_5">
-              <item row="2" column="1">
-               <widget class="QSpinBox" name="spinBox_14">
-                <property name="suffix">
-                 <string/>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="comboBox_2">
+               <widget class="QComboBox" name="comboBox_TI_Mode">
                 <item>
                  <property name="text">
-                  <string>PID Auto Control Temperature</string>
+                  <string>Non-PID Auto Control Temperature</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Non-PID Auto Control Temperature</string>
+                  <string>PID Auto Control Temperature</string>
                  </property>
                 </item>
                </widget>
@@ -693,7 +752,7 @@
               <item row="2" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_8">
                 <item>
-                 <widget class="QCheckBox" name="checkBox_3">
+                 <widget class="QCheckBox" name="checkBox_TI_TestMicroPID">
                   <property name="text">
                    <string>Dector</string>
                   </property>
@@ -730,10 +789,20 @@
                 </property>
                </widget>
               </item>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TI_MicroPIDValueMin">
+                <property name="decimals">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <double>4294967295.000000000000000</double>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="tableWidget_2">
+             <widget class="QTableWidget" name="tableWidgetTI">
               <property name="selectionMode">
                <enum>QAbstractItemView::ExtendedSelection</enum>
               </property>
@@ -787,6 +856,26 @@
               </column>
               <column>
                <property name="text">
+                <string>T(℃)</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>∆t(ms)</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Rate(℃/min)</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>t(ms)</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
                 <string>PWM(%)</string>
                </property>
               </column>
@@ -824,15 +913,15 @@
                </spacer>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="comboBox_4">
+               <widget class="QComboBox" name="comboBox_COLUMN_Mode">
                 <item>
                  <property name="text">
-                  <string>PID Auto Control Temperature</string>
+                  <string>Non-PID Auto Control Temperature</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Non-PID Auto Control Temperature</string>
+                  <string>PID Auto Control Temperature</string>
                  </property>
                 </item>
                </widget>
@@ -853,7 +942,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="tableWidget_3">
+             <widget class="QTableWidget" name="tableWidgetCOLUMN">
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
@@ -917,6 +1006,16 @@
                 <string>Rate(℃/min)</string>
                </property>
               </column>
+              <column>
+               <property name="text">
+                <string>t(s)</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>PWM(%)</string>
+               </property>
+              </column>
              </widget>
             </item>
            </layout>
@@ -926,7 +1025,52 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2"/>
+     <widget class="QWidget" name="page_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Operating</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_ChartBack">
+            <property name="text">
+             <string>Back</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>764</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

@@ -16,7 +16,7 @@
 #include <CCE_CommunicatEngine/CCECluster>
 
 #include <CCE_ChromXItem/CCEChromXDevice>
-#include <JsonHelper/cxajsontestparamset.h>
+#include <cxatestparamset.h>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -525,5 +525,8 @@ void MainWindow::initUI()
     });
     ui->spinBoxLEDProgress->setValue(0);
     ui->progressBarLEDProgress->setValue(0);
+    ui->scrollArea->setWidget(new CXATestParamSet());
+    ui->frame_2->hide();
+    //this->showFullScreen();
 }
 

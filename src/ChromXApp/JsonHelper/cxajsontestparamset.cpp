@@ -565,13 +565,13 @@ bool CXAJsonPIDAll::buildJson(QJsonDocument &doc, const qint8 version)
     jsonTIPIDObj["P"]            = (double)m_data.TI_PID_P_Parma;
     jsonTIPIDObj["I"]            = (double)m_data.TI_PID_I_Parma;
     jsonTIPIDObj["D"]            = (double)m_data.TI_PID_D_Parma;
-    jsonPIDAllObj["TI_PID"] = jsonTDPIDObj;
+    jsonPIDAllObj["TI_PID"] = jsonTIPIDObj;
 
     QJsonObject jsonCOLUMNPIDObj;
     jsonCOLUMNPIDObj["P"]            = (double)m_data.COLUMN_PID_P_Parma;
     jsonCOLUMNPIDObj["I"]            = (double)m_data.COLUMN_PID_I_Parma;
     jsonCOLUMNPIDObj["D"]            = (double)m_data.COLUMN_PID_D_Parma;
-    jsonPIDAllObj["COLUMN_PID"] = jsonTDPIDObj;
+    jsonPIDAllObj["COLUMN_PID"] = jsonCOLUMNPIDObj;
 
     //设置doc
     doc.setObject(jsonPIDAllObj);
@@ -590,14 +590,14 @@ bool CXAJsonPIDAll::parseJson(const QJsonDocument &doc, const qint8 version)
 
 
     QJsonObject jsonTIPIDObj = jsonPIDAllObj["TI_PID"].toObject();
-    m_data.TI_PID_P_Parma    =       jsonTDPIDObj["P"].toDouble();
-    m_data.TI_PID_I_Parma    =       jsonTDPIDObj["I"].toDouble();
-    m_data.TI_PID_D_Parma    =       jsonTDPIDObj["D"].toDouble();
+    m_data.TI_PID_P_Parma    =       jsonTIPIDObj["P"].toDouble();
+    m_data.TI_PID_I_Parma    =       jsonTIPIDObj["I"].toDouble();
+    m_data.TI_PID_D_Parma    =       jsonTIPIDObj["D"].toDouble();
 
     QJsonObject jsonCOLUMNPIDObj = jsonPIDAllObj["COLUMN_PID"].toObject();
-    m_data.COLUMN_PID_P_Parma    =       jsonTDPIDObj["P"].toDouble();
-    m_data.COLUMN_PID_I_Parma    =       jsonTDPIDObj["I"].toDouble();
-    m_data.COLUMN_PID_D_Parma    =       jsonTDPIDObj["D"].toDouble();
+    m_data.COLUMN_PID_P_Parma    =       jsonCOLUMNPIDObj["P"].toDouble();
+    m_data.COLUMN_PID_I_Parma    =       jsonCOLUMNPIDObj["I"].toDouble();
+    m_data.COLUMN_PID_D_Parma    =       jsonCOLUMNPIDObj["D"].toDouble();
 
     return true;
 }
@@ -629,6 +629,9 @@ bool CXAJsonTestParamSet::buildJson(QJsonDocument &doc, const qint8 version)
     jsonBaseInfoObj["Version"]              =  m_version;
     if(m_creatDataTime.isEmpty()){
         jsonBaseInfoObj["CreatDataTime"]    =  QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss");
+    }
+    else{
+        jsonBaseInfoObj["CreatDataTime"] = m_creatDataTime;
     }
     jsonBaseInfoObj["ModifDataTime"]        =  QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss");
     jsonTestParamSetObj["BaseInfo"] = jsonBaseInfoObj;
