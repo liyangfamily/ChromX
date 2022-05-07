@@ -3,7 +3,7 @@ include(../../ChromX.pri)
 include(ChromXApp.pri)
 
 QT += core gui network serialport opengl openglextensions printsupport
-QT += concurrent
+QT += concurrent charts
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app

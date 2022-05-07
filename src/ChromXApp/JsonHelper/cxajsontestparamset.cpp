@@ -90,6 +90,47 @@ bool CXAJsonPIDCtrl::parseJson(const QJsonDocument &doc, const qint8 version)
     return true;
 }
 
+CXAJsonPressureCtrl::CXAJsonPressureCtrl(const SPressureCtrl &value, int index):
+    m_data(value),m_index(index)
+{
+
+}
+
+void CXAJsonPressureCtrl::setPressureCtrl(const SPressureCtrl &value, int index)
+{
+    m_data = value;
+    m_index = index;
+}
+
+void CXAJsonPressureCtrl::resetJsonData()
+{
+    m_index = 0;
+    m_data.clear();
+}
+
+bool CXAJsonPressureCtrl::buildJson(QJsonDocument &doc, const qint8 version)
+{
+    Q_UNUSED(version);
+    QJsonObject PressureCtrlObj;
+    PressureCtrlObj["index"]             = m_index;
+    PressureCtrlObj["TimeValue"]         = m_data.timeValue;
+    PressureCtrlObj["PressureValue"]     = m_data.pressureValue;
+
+    //设置doc
+    doc.setObject(PressureCtrlObj);
+    return true;
+}
+
+bool CXAJsonPressureCtrl::parseJson(const QJsonDocument &doc, const qint8 version)
+{
+    Q_UNUSED(version);
+    QJsonObject&& PressureCtrlObj = doc.object();
+    m_index                     = PressureCtrlObj["index"].toInt();
+    m_data.timeValue            = PressureCtrlObj["TimeValue"].toInt();
+    m_data.pressureValue        = PressureCtrlObj["PressureValue"].toInt();
+    return true;
+}
+
 
 CXAJsonTDCtrl::CXAJsonTDCtrl(const STDCtrl &value):
     m_data(value)
@@ -106,6 +147,7 @@ bool CXAJsonTDCtrl::buildJson(QJsonDocument &doc, const qint8 version)
 {
     Q_UNUSED(version);
     QJsonObject jsonTDCtrlObj;
+    jsonTDCtrlObj["CounterBlowingTime"] = m_data.BeforeTDStartup_TestPCG;
     jsonTDCtrlObj["BeforeTDStartup_TestPCG"] = m_data.BeforeTDStartup_TestPCG;
     jsonTDCtrlObj["TDStart_CarrierPressure_UpLimit"] = m_data.TDStart_CarrierPressure_UpLimit;
     jsonTDCtrlObj["TDStart_CarrierPressure_LowLimit"] = m_data.TDStart_CarrierPressure_LowLimit;
@@ -151,6 +193,7 @@ bool CXAJsonTDCtrl::parseJson(const QJsonDocument &doc, const qint8 version)
     Q_UNUSED(version);
     QJsonObject&& jsonTDCtrlObj = doc.object();
 
+    m_data.CounterBlowingTime                  =       jsonTDCtrlObj["CounterBlowingTime"].toInt();
     m_data.BeforeTDStartup_TestPCG             =       jsonTDCtrlObj["BeforeTDStartup_TestPCG"].toInt();
     m_data.TDStart_CarrierPressure_UpLimit     =       jsonTDCtrlObj["TDStart_CarrierPressure_UpLimit"].toInt();
     m_data.TDStart_CarrierPressure_LowLimit    =       jsonTDCtrlObj["TDStart_CarrierPressure_LowLimit"].toInt();
@@ -603,6 +646,68 @@ bool CXAJsonPIDAll::parseJson(const QJsonDocument &doc, const qint8 version)
 }
 
 
+CXAJsonPressureMode::CXAJsonPressureMode(const SPressureMode &value):
+    m_data(value)
+{
+
+}
+
+void CXAJsonPressureMode::setPressureMode(const SPressureMode &value)
+{
+    m_data = value;
+}
+
+void CXAJsonPressureMode::resetJsonData()
+{
+    m_data.clear();
+}
+
+bool CXAJsonPressureMode::buildJson(QJsonDocument &doc, const qint8 version)
+{
+    Q_UNUSED(version);
+    QJsonObject jsonPressureObj;
+
+    // build CtrlArray
+    QJsonArray jsonPressureCtrlArray;
+    int index = 0;
+    for (auto &&item : m_data.pressureCtrlArray){
+        QJsonDocument tempDoc;
+        CXAJsonPressureCtrl jsonPressureCtrl(item,index++);
+        if (jsonPressureCtrl.buildJson(tempDoc)){
+            if (tempDoc.isObject()){
+                jsonPressureCtrlArray.append(tempDoc.object());
+            }
+        }
+    }
+    jsonPressureObj["PressureCtrl"] = jsonPressureCtrlArray;
+
+    //设置doc
+    doc.setObject(jsonPressureObj);
+    return true;
+}
+
+bool CXAJsonPressureMode::parseJson(const QJsonDocument &doc, const qint8 version)
+{
+    Q_UNUSED(version);
+    QJsonObject&& jsonPressureObj = doc.object();
+
+    QJsonArray jsonPressureCtrlArray = jsonPressureObj["PressureCtrl"].toArray();
+    int index = 0;
+    for (auto &&item : jsonPressureCtrlArray){
+        QJsonDocument tempDoc;
+        tempDoc.setObject(item.toObject());
+        CXAJsonPressureCtrl jsonPressureCtrl;
+        jsonPressureCtrl.parseJson(tempDoc,version);
+        index = jsonPressureCtrl.index();
+        if(index<sizeof(m_data.pressureCtrlArray)/sizeof(m_data.pressureCtrlArray[0])){
+            m_data.pressureCtrlArray[index] = jsonPressureCtrl.PressureCtrl();
+        }
+    }
+
+    return true;
+}
+
+
 CXAJsonTestParamSet::CXAJsonTestParamSet(const STestParamSet &value):
     m_data(value)
 {
@@ -648,6 +753,11 @@ bool CXAJsonTestParamSet::buildJson(QJsonDocument &doc, const qint8 version)
     jsonRunParamSet.buildJson(tempDoc,version);
     jsonTestParamSetObj["RunParam"] = tempDoc.object();
 
+    // build PressureMode
+    CXAJsonPressureMode jsonPressureMode(m_data.pressureMode);
+    jsonPressureMode.buildJson(tempDoc,version);
+    jsonTestParamSetObj["PressureMode"] = tempDoc.object();
+
     //设置doc
     doc.setObject(jsonTestParamSetObj);
     return true;
@@ -677,6 +787,12 @@ bool CXAJsonTestParamSet::parseJson(const QJsonDocument &doc, const qint8 versio
     CXAJsonRunParamSet jsonRunParamSet;
     jsonRunParamSet.parseJson(tempDoc,version);
     m_data.runParamSet = jsonRunParamSet.runParam();
+
+    // parse RunParamSet
+    tempDoc.setObject(jsonTestParamSetObj["PressureMode"].toObject());
+    CXAJsonPressureMode jsonPressureMode;
+    jsonPressureMode.parseJson(tempDoc,version);
+    m_data.pressureMode = jsonPressureMode.PressureMode();
 
     return true;
 }

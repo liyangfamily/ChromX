@@ -9,6 +9,7 @@ class CXATestParamSet;
 }
 class QTableWidget;
 class CXAJsonTestParamSet;
+class CXAChartWidget;
 class CXATestParamSet : public QWidget
 {
     Q_OBJECT
@@ -29,6 +30,7 @@ private:
         };
     Ui::CXATestParamSet *ui;
     QScopedPointer<CXAJsonTestParamSet> m_jsonTestParamSet;
+    CXAChartWidget * m_chart = nullptr;
 
 public slots:
     void on_btn_ToChart_clicked();
@@ -36,11 +38,16 @@ public slots:
     void on_btn_PIDSetRead_clicked();
     void on_btn_SaveASDefault_clicked();
     void on_btn_ImportTemplate_clicked();
+
+    void on_btn_PressureRead_clicked();
+    void on_btn_PressureWrite_clicked();
+
     void tableWidgetCellChanged(int row, int column);
 
 private:
     void initUI();
     void initSignalAndSlot();
+    void initChartUI();
     bool importTemplateFile();
     bool exportTemplateFile();
 
@@ -48,7 +55,9 @@ private:
     void updateJsonFromUI();
 
     void showTableValueFromJson(QTableWidget* table,STimeCtrl* timeCtrl ,SPIDCtrl* PIDCtrl,int rowSize,bool autoPID);
+    void showTableValueFromJson(QTableWidget* table,SPressureCtrl* pressureMode ,int rowSize);
     void getTableValueToJson(QTableWidget* table,STimeCtrl* timeCtrl ,SPIDCtrl* PIDCtrl,int rowSize);
+    void getTableValueToJson(QTableWidget* table,SPressureCtrl* pressureMode ,int rowSize);
     void computTablePIDValue(QTableWidget* table,int rowIndex = -1);
     void changeTabelShowMode(QTableWidget* table,bool autoPID);
 };
