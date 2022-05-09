@@ -5,6 +5,7 @@ FORMS += \
 
 HEADERS += \
     $$PWD/JsonHelper/cxajsontestparamset.h \
+    $$PWD/TransUiValueConvertor/cxatestparamsetconvertor.h \
     $$PWD/app.h \
     $$PWD/cxatestparamset.h \
     $$PWD/icore.h \
@@ -12,6 +13,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/JsonHelper/cxajsontestparamset.cpp \
+    $$PWD/TransUiValueConvertor/cxatestparamsetconvertor.cpp \
     $$PWD/app.cpp \
     $$PWD/cxatestparamset.cpp \
     $$PWD/icore.cpp \
