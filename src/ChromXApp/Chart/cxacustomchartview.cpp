@@ -43,7 +43,7 @@ void CXACustomChartView::mouseMoveEvent(QMouseEvent *event)
 {
     const QPoint curPos = event->pos();
     QPointF curVal = this->chart()->mapToValue(QPointF(curPos));
-    QString coordStr = QString("X = %1, Y = %2").arg(curVal.x()).arg(curVal.y());
+    QString coordStr = QString("X = %1, Y = %2").arg(QString::number(curVal.x(),'f',1)).arg(QString::number(curVal.y(),'f',1));
     m_coordItem->setText(coordStr);
 
     m_tooltipItem->setPos(event->pos().x()+20,event->pos().y()+10);
@@ -195,7 +195,7 @@ void CXACustomChartView::tooltip(QPointF point, bool state)
     if(state){
         QAbstractSeries* senderObj = qobject_cast<QAbstractSeries*>(this->sender());
         QPointF curVal = this->chart()->mapToValue(point,senderObj);
-        m_tooltipItem->setText(QString("X: %1 \nY: %2 ").arg(point.x()).arg(point.y()));
+        m_tooltipItem->setText(QString("X: %1 \nY: %2 ").arg(QString::number(point.x(),'f',1)).arg(QString::number(point.y(),'f',1)));
         m_tooltipItem->show();
     }
     else{

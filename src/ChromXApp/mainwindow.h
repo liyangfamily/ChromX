@@ -19,7 +19,7 @@ public:
 private:
     Ui::MainWindow *ui;
     ICore *m_coreImpl = nullptr;
-
+    QTimer *m_timer = nullptr;
 public slots:
 
     void on_btn_Refresh_clicked();

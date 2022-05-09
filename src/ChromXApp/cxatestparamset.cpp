@@ -17,7 +17,7 @@ CXATestParamSet::CXATestParamSet(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CXATestParamSet),
     m_jsonTestParamSet(new CXAJsonTestParamSet),
-    m_chart(new CXAChartWidget(this))
+    m_chart(new CXAChartWidget(CXAChartWidget::ECM_TestData,this))
 {
     ui->setupUi(this);
     initUI();

@@ -17,6 +17,8 @@
 
 #include <CCE_ChromXItem/CCEChromXDevice>
 #include <cxatestparamset.h>
+#include <Chart/cxachartwidget.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -24,11 +26,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug()<<CCEUIHelper::appName();
+    m_timer = new QTimer(this);
     initUI();
 }
 
 MainWindow::~MainWindow()
 {
+    m_timer->stop();
+
     delete m_coreImpl;
     m_coreImpl = nullptr;
 
@@ -397,30 +402,70 @@ void MainWindow::on_btnReadEPCSwitch_clicked()
 //***************************************************4、单控状态单元（0x13）按钮事件***************************************************************/
 void MainWindow::on_btnReadTDTemperature_clicked()
 {
-    quint16 ret = gChromXSingleStatus.readTDCurTemperature();
-    ICore::showMessageCCEAPIResult(ret);
-    ui->spinBoxTDTemperature->setValue(gChromXSingleStatus.getTDCurTemperature());
+    if(!m_timer->isActive()){
+        m_timer->start(200);
+        m_timer->disconnect();
+        connect(m_timer,&QTimer::timeout,this,[=]{
+            quint16 ret = gChromXSingleStatus.readTDCurTemperature(false);
+        });
+    }
+    else{
+        m_timer->stop();
+    }
+//    quint16 ret = gChromXSingleStatus.readTDCurTemperature(false);
+//    ICore::showMessageCCEAPIResult(ret);
+//    ui->spinBoxTDTemperature->setValue(gChromXSingleStatus.getTDCurTemperature());
 }
 
 void MainWindow::on_btnReadTITemperature_clicked()
 {
-    quint16 ret = gChromXSingleStatus.readTICurTemperature();
-    ICore::showMessageCCEAPIResult(ret);
-    ui->spinBoxTITemperature->setValue(gChromXSingleStatus.getTICurTemperature());
+    if(!m_timer->isActive()){
+        m_timer->start(200);
+        m_timer->disconnect();
+        connect(m_timer,&QTimer::timeout,this,[=]{
+            quint16 ret = gChromXSingleStatus.readTICurTemperature(false);
+        });
+    }
+    else{
+        m_timer->stop();
+    }
+//    quint16 ret = gChromXSingleStatus.readTICurTemperature();
+//    ICore::showMessageCCEAPIResult(ret);
+//    ui->spinBoxTITemperature->setValue(gChromXSingleStatus.getTICurTemperature());
 }
 
 void MainWindow::on_btnReadCOLUMNTemperature_clicked()
 {
-    quint16 ret = gChromXSingleStatus.readCOLUMNTemperature();
-    ICore::showMessageCCEAPIResult(ret);
-    ui->spinBoxCOLUMNTemperature->setValue(gChromXSingleStatus.getCOLUMNTemperature());
+    if(!m_timer->isActive()){
+        m_timer->start(200);
+        m_timer->disconnect();
+        connect(m_timer,&QTimer::timeout,this,[=]{
+            quint16 ret = gChromXSingleStatus.readCOLUMNTemperature(false);
+        });
+    }
+    else{
+        m_timer->stop();
+    }
+//    quint16 ret = gChromXSingleStatus.readCOLUMNTemperature();
+//    ICore::showMessageCCEAPIResult(ret);
+//    ui->spinBoxCOLUMNTemperature->setValue(gChromXSingleStatus.getCOLUMNTemperature());
 }
 
 void MainWindow::on_btnReadMicroPIDValue_clicked()
 {
-    quint16 ret = gChromXSingleStatus.readMicroPIDValue();
-    ICore::showMessageCCEAPIResult(ret);
-    ui->spinBoxMicroPIDValue->setValue(gChromXSingleStatus.getMicroPIDValue());
+    if(!m_timer->isActive()){
+        m_timer->start(200);
+        m_timer->disconnect();
+        connect(m_timer,&QTimer::timeout,this,[=]{
+            quint16 ret = gChromXSingleStatus.readMicroPIDValue(false);
+        });
+    }
+    else{
+        m_timer->stop();
+    }
+//    quint16 ret = gChromXSingleStatus.readMicroPIDValue();
+//    ICore::showMessageCCEAPIResult(ret);
+//    ui->spinBoxMicroPIDValue->setValue(gChromXSingleStatus.getMicroPIDValue());
 }
 
 void MainWindow::on_btnReadEPCPressure_clicked()
@@ -527,6 +572,7 @@ void MainWindow::initUI()
     ui->progressBarLEDProgress->setValue(0);
     ui->scrollArea->setWidget(new CXATestParamSet());
     ui->frame_2->hide();
+    ui->verticalLayout_5->addWidget(new CXAChartWidget(CXAChartWidget::ECM_SingleStatus,this));
     //this->showFullScreen();
 }
 
