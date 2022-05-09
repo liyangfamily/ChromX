@@ -1,15 +1,23 @@
 ﻿#include "cxatestparamset.h"
 #include "ui_cxatestparamset.h"
-#include <QFileDialog>
-#include <app.h>
+
+#include "app.h"
+#include "icore.h"
+
 #include <JsonHelper/cxajsontestparamset.h>
+#include <Chart/cxachartwidget.h>
 #include <CCE_ChromXItem/CCEChromXDevice>
+
+#include <QFileDialog>
 #include <QStandardItemModel>
+#include <QVBoxLayout>
+
 
 CXATestParamSet::CXATestParamSet(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CXATestParamSet),
-    m_jsonTestParamSet(new CXAJsonTestParamSet)
+    m_jsonTestParamSet(new CXAJsonTestParamSet),
+    m_chart(new CXAChartWidget(CXAChartWidget::ECM_TestData,this))
 {
     ui->setupUi(this);
     initUI();
@@ -45,6 +53,31 @@ void CXATestParamSet::on_btn_ImportTemplate_clicked()
     importTemplateFile();
 }
 
+void CXATestParamSet::on_btn_PressureRead_clicked()
+{
+    quint16 ret = gChromXTestParamSet.readPressureMode();
+    ICore::showMessageCCEAPIResult(ret);
+    if(ret == CCEAPI::EResult::ER_Success){
+        SPressureMode& temp = gChromXTestParamSet.getPressureMode();
+        showTableValueFromJson(ui->tableWidgetPressure,temp.pressureCtrlArray,8);
+    }
+    ret = gChromXTestParamSet.readCounterBlowingTime();
+    ICore::showMessageCCEAPIResult(ret);
+    if(ret == CCEAPI::EResult::ER_Success){
+        ui->spinBox_TD_CounterBlowingTime->setValue(gChromXTestParamSet.getCounterBlowingTime());
+    }
+}
+
+void CXATestParamSet::on_btn_PressureWrite_clicked()
+{
+    SPressureMode tempPressure;
+    getTableValueToJson(ui->tableWidgetPressure,tempPressure.pressureCtrlArray,8);
+    quint16 ret = gChromXTestParamSet.writePressureMode(tempPressure);
+    ICore::showMessageCCEAPIResult(ret);
+    ret = gChromXTestParamSet.writeCounterBlowingTime(ui->spinBox_TD_CounterBlowingTime->value());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
 void CXATestParamSet::tableWidgetCellChanged(int row, int column)
 {
     QTableWidget* senderObj = qobject_cast<QTableWidget*>(this->sender());
@@ -62,6 +95,7 @@ void CXATestParamSet::tableWidgetCellChanged(int row, int column)
 void CXATestParamSet::initUI()
 {
     initSignalAndSlot();
+    initChartUI();
 
     ui->tableWidgetTD->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
     ui->tableWidgetTD->setItemDelegateForColumn(ETableCol::ECol_PIDTimeValue,new SpinBoxDelegate(this));
@@ -87,6 +121,10 @@ void CXATestParamSet::initUI()
     ui->tableWidgetCOLUMN->setItemDelegateForColumn(ETableCol::ECol_PIDTimeDifferenceValue,new ReadOnlyDelegate(this));
     ui->tableWidgetCOLUMN->setItemDelegateForColumn(ETableCol::ECol_PIDTemperRate,new ReadOnlyDelegate(this));
 
+    ui->tableWidgetPressure->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
+    ui->tableWidgetPressure->setItemDelegateForColumn(0,new SpinBoxDelegate(this));
+    ui->tableWidgetPressure->setItemDelegateForColumn(1,new SpinBoxDelegate(this));
+
     changeTabelShowMode(ui->tableWidgetTD,false);
     changeTabelShowMode(ui->tableWidgetTI,false);
     changeTabelShowMode(ui->tableWidgetCOLUMN,false);
@@ -104,6 +142,14 @@ void CXATestParamSet::initSignalAndSlot()
     connect(ui->tableWidgetTD,&QTableWidget::cellChanged,this,&CXATestParamSet::tableWidgetCellChanged);
     connect(ui->tableWidgetTI,&QTableWidget::cellChanged,this,&CXATestParamSet::tableWidgetCellChanged);
     connect(ui->tableWidgetCOLUMN,&QTableWidget::cellChanged,this,&CXATestParamSet::tableWidgetCellChanged);
+}
+
+void CXATestParamSet::initChartUI()
+{
+    QVBoxLayout *vBoxlayout = new QVBoxLayout();
+    vBoxlayout->addWidget(m_chart);
+    vBoxlayout->setMargin(0);
+    ui->frameChart->setLayout(vBoxlayout);
 }
 
 bool CXATestParamSet::importTemplateFile()
@@ -181,6 +227,7 @@ void CXATestParamSet::updateUIFromJson()
     //TD
     STDCtrl& TDCtrl = tempParam.runParamSet.TDCtrl;
     ui->comboBox_TD_Mode->setCurrentIndex((bool)TDCtrl.controlMode);
+    ui->spinBox_TD_CounterBlowingTime->setValue(TDCtrl.CounterBlowingTime);
     ui->checkBox_TD_TestPcg->setChecked((bool)TDCtrl.BeforeTDStartup_TestPCG);
     ui->spinBox_TD_LowLimit->setValue(TDCtrl.TDStart_CarrierPressure_LowLimit);
     ui->spinBox_TD_UpLimit->setValue(TDCtrl.TDStart_CarrierPressure_UpLimit);
@@ -199,6 +246,10 @@ void CXATestParamSet::updateUIFromJson()
     SCOLUMNCtrl& COLUMNCtrl = tempParam.runParamSet.COLUMNCtrl;
     ui->comboBox_COLUMN_Mode->setCurrentIndex((bool)COLUMNCtrl.controlMode);
     showTableValueFromJson(ui->tableWidgetCOLUMN,COLUMNCtrl.timeCtrlArray,COLUMNCtrl.PIDCtrlArray,8,COLUMNCtrl.controlMode);
+
+    //Pressure
+    SPressureMode& PressureMode = tempParam.pressureMode;
+    showTableValueFromJson(ui->tableWidgetPressure,PressureMode.pressureCtrlArray,8);
 }
 
 void CXATestParamSet::updateJsonFromUI()
@@ -236,6 +287,7 @@ void CXATestParamSet::updateJsonFromUI()
     //TD
     STDCtrl& TDCtrl = tempParam.runParamSet.TDCtrl;
     TDCtrl.controlMode = (bool)ui->comboBox_TD_Mode->currentIndex();
+    TDCtrl.CounterBlowingTime = ui->spinBox_TD_CounterBlowingTime->value();
     TDCtrl.BeforeTDStartup_TestPCG = ui->checkBox_TD_TestPcg->isChecked();
     TDCtrl.TDStart_CarrierPressure_LowLimit = ui->spinBox_TD_LowLimit->value();
     TDCtrl.TDStart_CarrierPressure_UpLimit = ui->spinBox_TD_UpLimit->value();
@@ -254,6 +306,10 @@ void CXATestParamSet::updateJsonFromUI()
     SCOLUMNCtrl& COLUMNCtrl = tempParam.runParamSet.COLUMNCtrl;
     COLUMNCtrl.controlMode = (bool)ui->comboBox_COLUMN_Mode->currentIndex();
     getTableValueToJson(ui->tableWidgetCOLUMN,COLUMNCtrl.timeCtrlArray,COLUMNCtrl.PIDCtrlArray,8);
+
+    //Pressure
+    SPressureMode& PressureMode = tempParam.pressureMode;
+    getTableValueToJson(ui->tableWidgetPressure,PressureMode.pressureCtrlArray,8);
 
     m_jsonTestParamSet->setTestParam(tempParam);
 }
@@ -276,15 +332,6 @@ void CXATestParamSet::showTableValueFromJson(QTableWidget *table, STimeCtrl *tim
         QString str = QString::number(double(tempPIDCtrl.temperatureValue)/10.0,'f',1);
         table->setItem(i, ECol_PIDTemperValue, new QTableWidgetItem(str)); //TODO: 公式计算
         table->item(i, ECol_PIDTemperValue)->setTextAlignment(Qt::AlignCenter);
-//        QDoubleSpinBox *doubleSpinBox = new QDoubleSpinBox(table);
-//        doubleSpinBox->setDecimals(1);
-//        doubleSpinBox->setAlignment(Qt::AlignmentFlag::AlignHCenter);
-//        doubleSpinBox->setMinimum(0);
-//        doubleSpinBox->setMaximum(0xFFFF);
-//        table->setCellWidget(i,ECol_PIDTemperValue,doubleSpinBox);
-//        connect(doubleSpinBox,QOverload<double>::of(&QDoubleSpinBox::valueChanged),this,[=](double value){
-//            computTablePIDValue(table);
-//        });
 
         table->setItem(i, ECol_TimeValue, new QTableWidgetItem(QString::number(tempTimeCtrl.timeValue)));
         table->item(i, ECol_TimeValue)->setTextAlignment(Qt::AlignCenter);
@@ -294,6 +341,25 @@ void CXATestParamSet::showTableValueFromJson(QTableWidget *table, STimeCtrl *tim
     }
     computTablePIDValue(table);
     changeTabelShowMode(table,autoPID);
+}
+
+void CXATestParamSet::showTableValueFromJson(QTableWidget *table, SPressureCtrl *pressureCtrl, int rowSize)
+{
+    if(!table||!pressureCtrl){
+        return;
+    }
+    const int RowCount = rowSize;
+    table->clearContents();
+    table->setRowCount(RowCount);//总行数
+    for(int i = 0;i<RowCount;++i){
+        SPressureCtrl& tempPressureCtrl = pressureCtrl[i];
+
+        table->setItem(i, 0, new QTableWidgetItem(QString::number(tempPressureCtrl.timeValue)));
+        table->item(i, 0)->setTextAlignment(Qt::AlignCenter);
+
+        table->setItem(i, 1, new QTableWidgetItem(QString::number(tempPressureCtrl.pressureValue)));
+        table->item(i, 1)->setTextAlignment(Qt::AlignCenter);
+    }
 }
 
 void CXATestParamSet::getTableValueToJson(QTableWidget *table, STimeCtrl *timeCtrl, SPIDCtrl *PIDCtrl,int rowSize)
@@ -317,15 +383,29 @@ void CXATestParamSet::getTableValueToJson(QTableWidget *table, STimeCtrl *timeCt
     }
 }
 
+void CXATestParamSet::getTableValueToJson(QTableWidget *table, SPressureCtrl *pressureCtrl, int rowSize)
+{
+    if(!table||!pressureCtrl){
+        return;
+    }
+    const int RowCount = table->rowCount();
+    if(rowSize!=RowCount){
+        return;
+    }
+    for(int i = 0;i<RowCount;++i){
+        SPressureCtrl& tempPressureCtrl = pressureCtrl[i];
+
+        tempPressureCtrl.timeValue = table->item(i, 0)->text().toUShort();
+        tempPressureCtrl.pressureValue = table->item(i, 1)->text().toUShort();
+    }
+}
+
 void CXATestParamSet::computTablePIDValue(QTableWidget *table,int rowIndex)
 {
     if(!table){
         return;
     }
     double TimeConversion = (table==ui->tableWidgetTI)?60*1000:60;
-    if(table==ui->tableWidgetCOLUMN){
-        int i=0;
-    }
     const int RowCount = table->rowCount();
     for(int i = 0;i<RowCount;++i){
         if(rowIndex!=-1&&rowIndex!=i){

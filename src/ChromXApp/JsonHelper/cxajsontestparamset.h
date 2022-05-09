@@ -23,8 +23,8 @@ public:
     int index(){return m_index;}
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     STimeCtrl m_data;
@@ -43,15 +43,32 @@ public:
     int index(){return m_index;}
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     SPIDCtrl m_data;
     int m_index;
 };
 
+class CXAJsonPressureCtrl : public CCEJsonHelper
+{
+public:
+    CXAJsonPressureCtrl(){};
+    CXAJsonPressureCtrl(const SPressureCtrl& value, int index);
 
+    void setPressureCtrl(const SPressureCtrl& value, int index);
+    SPressureCtrl PressureCtrl() const{return m_data;}
+    int index(){return m_index;}
+    void resetJsonData();
+public:
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
+
+private:
+    SPressureCtrl m_data;
+    int m_index;
+};
 
 class CXAJsonTDCtrl : public CCEJsonHelper
 {
@@ -64,8 +81,8 @@ public:
 
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     STDCtrl m_data;
@@ -82,8 +99,8 @@ public:
 
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     STICtrl m_data;
@@ -100,8 +117,8 @@ public:
 
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     SCOLUMNCtrl m_data;
@@ -118,8 +135,8 @@ public:
 
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     SMicroPIDCtrl m_data;;
@@ -136,8 +153,8 @@ public:
 public:
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     SRunParamSet m_data;
@@ -156,11 +173,31 @@ public:
 
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     SPIDAll m_data;;
+};
+
+class CXAJsonPressureMode : public CCEJsonHelper
+{
+public:
+    CXAJsonPressureMode(){};
+    CXAJsonPressureMode(const SPressureMode& value);
+
+    void setPressureMode(const SPressureMode& value);
+    SPressureMode PressureMode() const{
+        return m_data;
+    }
+
+    void resetJsonData();
+public:
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
+
+private:
+    SPressureMode m_data;;
 };
 
 class CXAJsonTestParamSet : public CCEJsonHelper
@@ -168,8 +205,9 @@ class CXAJsonTestParamSet : public CCEJsonHelper
 public:
     enum EVersion
     {
-        StdV1,
-        UnknownVersion = -1
+        Unknownversion = 0,
+        StdV1 = 1,
+        StdV2 = 2,
     };
     CXAJsonTestParamSet(){};
     CXAJsonTestParamSet(const STestParamSet& value);
@@ -186,8 +224,8 @@ public:
 public:
     void resetJsonData();
 public:
-    bool buildJson(QJsonDocument &doc, const qint8 version = 0);
-    bool parseJson(const QJsonDocument &doc, const qint8 version = 0);
+    bool buildJson(QJsonDocument &doc, const qint8 version = 1);
+    bool parseJson(const QJsonDocument &doc, const qint8 version = 1);
 
 private:
     QString m_name;
