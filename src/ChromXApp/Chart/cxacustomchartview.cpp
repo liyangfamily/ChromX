@@ -90,7 +90,7 @@ void CXACustomChartView::wheelEvent(QWheelEvent *event)
         m_alreadySaveRange = true;
     }
 
-    const double factor = 1.5;//缩放比例
+    const double factor = 1.35;//缩放比例
     if (m_ctrlPress)
     {//Y轴
         QList<QAbstractAxis*> axisList = this->chart()->axes(Qt::Vertical);
