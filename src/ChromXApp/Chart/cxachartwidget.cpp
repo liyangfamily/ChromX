@@ -5,8 +5,10 @@
 #include "cxasinglestatustablemodel.h"
 #include "cxacustomchartview.h"
 
+#include <CCE_ChromXItem/CCEChromXDevice>
 #include <CCE_CommunicatEngine/CCEPackageDispatcher>
 
+#include <QtGlobal>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QTableView>
@@ -42,6 +44,7 @@ CXAChartWidget::CXAChartWidget(EChartMode mode/* = ECM_TestData*/, QWidget *pare
 
 CXAChartWidget::~CXAChartWidget()
 {
+    m_timer.stop();
     delete ui;
 }
 
@@ -61,9 +64,10 @@ bool CXAChartWidget::event(QEvent *e)
     {
         CCEPackageEvent *tempE = static_cast<CCEPackageEvent*>(e);
         if(tempE->unitAddr()==CCEPackage::EUnitAddr::EUA_TestData){
-            if(tempE->frameType()==CCEPackage::EFrameType::EFT_ReportFrame&&
+            if(/*tempE->frameType()==CCEPackage::EFrameType::EFT_ReportFrame&&*/
                     tempE->cmdNum()==CCEAbstractTestDataPackage::ECommand::EC_Read_TDCurTemperature){
                 qDebug()<<"Event Got Report TestData!";
+                handle_TestData_Read_AllInfo(tempE->package().data());
             }
         }
         else if(tempE->unitAddr()==CCEPackage::EUnitAddr::EUA_SingleStatus){
@@ -86,6 +90,7 @@ bool CXAChartWidget::event(QEvent *e)
                 break;
             case CCEAbstractSingleStatusPackage::ECommand::EC_Read_EPCPressure:
                 qDebug()<<"Event Got EPCPressure!";
+                handle_SingleStatus_Read_EPCPressure(tempE->package().data());
                 break;
             default:
                 break;
@@ -140,15 +145,20 @@ void CXAChartWidget::initToolButton()
     clearBtn->setText(tr("Clear"));
     connect(clearBtn,&QToolButton::clicked,this,&CXAChartWidget::slot_clearChart);
     m_toolBtnLayout->addWidget(clearBtn);
+
+    QToolButton* testBtn = new QToolButton;
+    testBtn->setText(tr("TestBtn"));
+    connect(testBtn,&QToolButton::clicked,this,&CXAChartWidget::slot_test);
+    m_toolBtnLayout->addWidget(testBtn);
 }
 
 void CXAChartWidget::initChart()
 {
-    m_seriesPairMap.clear();
     m_seriesInfoList.clear();
+
     //init axis
     m_axisX->setTickCount(10);
-    m_axisX->setRange(0, 10);
+    m_axisX->setRange(0, m_defalutXMax);
     m_axisY2->setTickCount(10);
     m_axisY2->setRange(0, m_y2);
     m_axisY->setTickCount(10);
@@ -182,11 +192,6 @@ void CXAChartWidget::initChart()
     //other operation
     slot_scatterSeriesVisible(false);
 
-//    setChannelVisible(EDataChannel::EDC_TITemper,false);
-//    setChannelVisible(EDataChannel::EDC_COLUMNTemper,false);
-//    setChannelVisible(EDataChannel::EDC_MicroPID,false);
-//    setChannelVisible(EDataChannel::EDC_EPCPressure,false);
-
     //connect signals
     QObject::connect(m_model, &CXATestDataTableModel::rowsInserted, this, &CXAChartWidget::handleDataAppend);
 
@@ -203,6 +208,7 @@ void CXAChartWidget::initModel()
 {
     if(m_chartMode==ECM_TestData){
         m_model = new CXATestDataTableModel;
+        gDispatcher->registerDispatcherPackage(CCETestDataPackage_ReadAllInfo(),this);
         gDispatcher->registerDispatcherPackage(CCETestDataPackage_ReportAllInfo(),this);
     }
     else{
@@ -218,16 +224,20 @@ void CXAChartWidget::initModel()
     m_tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     m_tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
+
+    //Test Code
     connect(&m_timer,&QTimer::timeout,this,[=]{
         if(m_chartMode == ECM_TestData){
-            STestData data;
-            static unsigned int s_index = 0;
-            data.curTestRunTime = s_index++;
-            data.TDCurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
-            data.TICurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
-            data.COLUMNTemperature = QRandomGenerator::global()->bounded(0xFFFF);
-            data.MicroPIDValue = QRandomGenerator::global()->bounded(500);
-            qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(data);
+            gChromXTestData.readAllInfo(true);
+//            STestData data;
+//            static unsigned int s_index = 0;
+//            s_index += 1;
+//            data.curTestRunTime = s_index;
+//            data.TDCurTemperature = QRandomGenerator::global()->bounded(500);
+//            data.TICurTemperature = QRandomGenerator::global()->bounded(500);
+//            data.COLUMNTemperature = QRandomGenerator::global()->bounded(500);
+//            data.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
+//            qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(data);
         }else{
             SSingleStatus data;
             data.TDCurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
@@ -239,14 +249,16 @@ void CXAChartWidget::initModel()
         }
         m_tableView->scrollToBottom();
     });
-    //m_timer.start(100);
+    if(m_chartMode==ECM_TestData){
+        m_timer.setInterval(200);
+    }
 }
 
 void CXAChartWidget::addChannel(EDataChannel channel, QString name, int modelXCol, int modelYCol, QtCharts::QValueAxis *x, QtCharts::QValueAxis *y)
 {
     //折线图
-    //QLineSeries* series = new QLineSeries;
-    QSplineSeries* series = new QSplineSeries;
+    QLineSeries* series = new QLineSeries;
+    //QSplineSeries* series = new QSplineSeries;
     series->setName(name);
     QVXYModelMapper *mapper = new QVXYModelMapper(this);
     mapper->setXColumn(modelXCol);
@@ -270,8 +282,7 @@ void CXAChartWidget::addChannel(EDataChannel channel, QString name, int modelXCo
     scatterSeries->attachAxis(x);
     scatterSeries->attachAxis(y);
     connect(scatterSeries, &QScatterSeries::hovered, m_chartView, &CXACustomChartView::tooltip);
-    //添加到pair
-    m_seriesPairMap.insert(series,scatterSeries);
+
     SSeriesInfo info;
     info.name = name;
     info.channel = channel;
@@ -282,9 +293,8 @@ void CXAChartWidget::addChannel(EDataChannel channel, QString name, int modelXCo
 
 void CXAChartWidget::handleDataAppend()
 {
-    qreal dwidth= m_chart->plotArea().width()/(m_axisX->tickCount()); //一次滚动多少宽度
-    qreal dx= 10/(m_axisX->tickCount()); //横坐标偏移量
-    m_x += dx;
+    qreal dwidth= m_chart->plotArea().width()*1.5/(m_axisX->tickCount()); //一次滚动多少宽度
+    m_x = m_model->data(m_model->index(m_model->rowCount()-1,0)).toUInt();
 
     switch(m_refreshMode){
     case ERM_Dynamic:
@@ -302,13 +312,9 @@ void CXAChartWidget::handleDataAppend()
         break;
     }
 
-    if(m_model->rowCount()>50){
+    //Test Code
+    if(m_model->rowCount()>4000){
         m_timer.stop();
-        //setChannelVisible(EDataChannel::EDC_TDTemper,false);
-        //setChannelVisible(EDataChannel::EDC_TITemper,false);
-        //setChannelVisible(EDataChannel::EDC_COLUMNTemper,false);
-        //setChannelVisible(EDataChannel::EDC_MicroPID,false);
-        //setChannelVisible(EDataChannel::EDC_EPCPressure,false);
     }
 }
 
@@ -369,11 +375,61 @@ void CXAChartWidget::setSeriesVisible(QtCharts::QAbstractSeries *obj, bool visib
         return;
     }
     obj->setVisible(visible);
-    if(m_seriesPairMap.contains(obj)){
-        QtCharts::QAbstractSeries* scatterObj = m_seriesPairMap.value(obj);
-        scatterObj->setVisible(b_showScatterSeries?visible:b_showScatterSeries);
-        m_chart->legend()->markers(scatterObj).first()->setVisible(false);
+    for(auto&& item : m_seriesInfoList){
+        if(item.lineSeries==obj){
+            QtCharts::QAbstractSeries* scatterObj = item.scatterSeries;
+            scatterObj->setVisible(b_showScatterSeries?visible:b_showScatterSeries);
+            //始终隐藏markers
+            m_chart->legend()->markers(scatterObj).first()->setVisible(false);
+            break;
+        }
     }
+}
+
+void CXAChartWidget::updateYMax(qreal max)
+{
+    m_axisY->setMax(max);
+    m_y= max;
+}
+
+void CXAChartWidget::updateY2Max(qreal max)
+{
+    m_axisY2->setMax(max);
+    m_y2 = max>m_y2?max:m_y2;
+}
+
+quint16 CXAChartWidget::handle_TestData_Read_AllInfo(const QByteArray &data)
+{
+    CCETestDataPackage_ReadAllInfo pack(data);
+    quint16 ret = pack.isValid();
+    if(ret==CCEAPI::EResult::ER_Success){
+        STestData&& data = pack.getInfo();
+        static unsigned int s_index = 0;
+        data.curTestRunTime = s_index++;
+        data.TDCurTemperature = QRandomGenerator::global()->bounded(500);
+        data.TICurTemperature = QRandomGenerator::global()->bounded(500);
+        data.COLUMNTemperature = QRandomGenerator::global()->bounded(500);
+        data.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
+        qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(data);
+
+
+        qreal singleStepY = m_axisY->max()/m_axisY->tickCount()/2;
+        qreal maxValueY = 0;
+        maxValueY = qMax((qreal)data.MicroPIDValue , maxValueY);
+        if(maxValueY>m_axisY->max()-singleStepY){
+            updateYMax(maxValueY+singleStepY);
+        }
+
+        qreal singleStepY2 = m_axisY2->max()/m_axisY2->tickCount()/2;
+        qreal maxValueY2 = 0;
+        maxValueY2 = qMax((qreal)data.TDCurTemperature , maxValueY2);
+        maxValueY2 = qMax((qreal)data.TICurTemperature , maxValueY2);
+        maxValueY2 = qMax((qreal)data.COLUMNTemperature , maxValueY2);
+        if(maxValueY2>m_axisY2->max()-singleStepY2){
+            updateY2Max(maxValueY2+singleStepY2);
+        }
+    }
+    return ret;
 }
 
 quint16 CXAChartWidget::handle_SingleStatus_Read_TDCurTemperature(const QByteArray &data)
@@ -383,14 +439,10 @@ quint16 CXAChartWidget::handle_SingleStatus_Read_TDCurTemperature(const QByteArr
     if(ret==CCEAPI::EResult::ER_Success){
         SSingleStatus data;
         data.TDCurTemperature = pack.getCurTemperature()/10;
-//        data.TICurTemperature = QRandomGenerator::global()->bounded(500);
-//        data.COLUMNTemperature = QRandomGenerator::global()->bounded(500);
-//        data.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
-//        data.EPCPressure = QRandomGenerator::global()->bounded(500);
         qobject_cast<CXASingleStatusTableModel*>(m_model)->appendModelData(data);
-        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount();
+        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount()/2;
         if(data.TDCurTemperature>m_axisY2->max()-singleStep){
-            m_axisY2->setMax(data.TDCurTemperature+singleStep);
+            updateY2Max(data.TDCurTemperature+singleStep);
         }
     }
     return ret;
@@ -404,9 +456,9 @@ quint16 CXAChartWidget::handle_SingleStatus_Read_TICurTemperature(const QByteArr
         SSingleStatus data;
         data.TICurTemperature = pack.getCurTemperature()/10;
         qobject_cast<CXASingleStatusTableModel*>(m_model)->appendModelData(data);
-        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount();
+        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount()/2;
         if(data.TICurTemperature>m_axisY2->max()-singleStep){
-            m_axisY2->setMax(data.TICurTemperature+singleStep);
+            updateY2Max(data.TICurTemperature+singleStep);
         }
     }
     return ret;
@@ -420,9 +472,9 @@ quint16 CXAChartWidget::handle_SingleStatus_Read_COLUMNCurTemperature(const QByt
         SSingleStatus data;
         data.COLUMNTemperature = pack.getCurTemperature()/10;
         qobject_cast<CXASingleStatusTableModel*>(m_model)->appendModelData(data);
-        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount();
+        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount()/2;
         if(data.COLUMNTemperature>m_axisY2->max()-singleStep){
-            m_axisY2->setMax(data.COLUMNTemperature+singleStep);
+            updateY2Max(data.COLUMNTemperature+singleStep);
         }
     }
     return ret;
@@ -436,9 +488,9 @@ quint16 CXAChartWidget::handle_SingleStatus_Read_MicroPIDValue(const QByteArray 
         SSingleStatus data;
         data.MicroPIDValue = pack.getValue();
         qobject_cast<CXASingleStatusTableModel*>(m_model)->appendModelData(data);
-        qreal singleStep = m_axisY->max()/m_axisY->tickCount();
+        qreal singleStep = m_axisY->max()/m_axisY->tickCount()/2;
         if(data.MicroPIDValue>m_axisY->max()-singleStep){
-            m_axisY->setMax(data.MicroPIDValue+singleStep);
+            updateYMax(data.MicroPIDValue+singleStep);
         }
     }
     return ret;
@@ -452,9 +504,9 @@ quint16 CXAChartWidget::handle_SingleStatus_Read_EPCPressure(const QByteArray &d
         SSingleStatus data;
         data.EPCPressure = pack.getValue();
         qobject_cast<CXASingleStatusTableModel*>(m_model)->appendModelData(data);
-        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount();
+        qreal singleStep = m_axisY2->max()/m_axisY2->tickCount()/2;
         if(data.EPCPressure>m_axisY2->max()-singleStep){
-            m_axisY2->setMax(data.EPCPressure+singleStep);
+            updateY2Max(data.EPCPressure+singleStep);
         }
     }
     return ret;
@@ -463,25 +515,26 @@ quint16 CXAChartWidget::handle_SingleStatus_Read_EPCPressure(const QByteArray &d
 void CXAChartWidget::slot_scatterSeriesVisible(bool visible)
 {
     b_showScatterSeries = visible;
-    for(auto&& item:m_seriesPairMap.keys()){
-        QtCharts::QAbstractSeries* scatterObj = m_seriesPairMap.value(item);
+    for(auto&& item:m_seriesInfoList){
+        QtCharts::QAbstractSeries* scatterObj = item.scatterSeries;
         if(!visible)
             scatterObj->setVisible(visible);
         else{
             //确保折线图是可见的，再显示散点图
-            if(item->isVisible()){
+            if(item.lineSeries->isVisible()){
                 scatterObj->setVisible(visible);
             }
         }
+        //始终隐藏markers
         m_chart->legend()->markers(scatterObj).first()->setVisible(false);
     }
 }
 
 void CXAChartWidget::slot_fitInView()
 {
-    m_axisX->setRange(0, m_x!=0?m_x:100);
-    m_axisY2->setRange(0, m_axisY2->max());
-    m_axisY->setRange(0, m_axisY->max());
+    m_axisX->setRange(0, m_x!=0?m_x:m_defalutXMax);
+    m_axisY->setRange(0, m_y);
+    m_axisY2->setRange(0, m_y2);
 }
 
 void CXAChartWidget::slot_checkedDynamicMode(bool checked)
@@ -491,6 +544,13 @@ void CXAChartWidget::slot_checkedDynamicMode(bool checked)
 
 void CXAChartWidget::slot_clearChart()
 {
+    if(m_timer.isActive()){
+        m_timer.stop();
+    }
+    else{
+        m_timer.start();
+    }
+    return;
     m_x = 0;
     slot_fitInView();
     if(m_chartMode==ECM_TestData){
@@ -499,4 +559,17 @@ void CXAChartWidget::slot_clearChart()
     else{
         qobject_cast<CXASingleStatusTableModel*>(m_model)->clearModelData();
     }
+}
+
+void CXAChartWidget::slot_test()
+{
+    STestData data;
+    static unsigned int s_test = 1;
+    s_test += 2;
+        data.curTestRunTime = s_test;
+        data.TDCurTemperature = 499;
+        data.TICurTemperature = 499;
+        data.COLUMNTemperature = 499;
+        data.MicroPIDValue = 0xFFFFFF00;
+        qobject_cast<CXATestDataTableModel*>(m_model)->insertModelData(data.curTestRunTime,data);
 }
