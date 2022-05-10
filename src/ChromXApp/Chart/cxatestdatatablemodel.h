@@ -29,8 +29,11 @@ public:
     void setModelData(const QList<STestData>& datas);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    void adjustModelData();
 private:
-    QList<STestData> m_data;
+    //QList<STestData> m_data;
+    QMap<quint32,STestData> m_data;
     int m_columnCount;
     int m_rowCount;
 };

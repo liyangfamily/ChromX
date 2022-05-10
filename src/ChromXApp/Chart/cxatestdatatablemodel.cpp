@@ -51,7 +51,8 @@ QVariant CXATestDataTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole) {
-        return m_data[index.row()].getModelData(index.column());
+        return (*(m_data.begin()+index.row())).getModelData(index.column());
+        //return m_data[index.row()].getModelData(index.column());
     } else if (role == Qt::EditRole) {
         return m_data[index.row()].getModelData(index.column());
     } else if (role == Qt::BackgroundRole) {
@@ -64,7 +65,8 @@ QVariant CXATestDataTableModel::data(const QModelIndex &index, int role) const
 bool CXATestDataTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid() && role == Qt::EditRole) {
-        m_data[index.row()].setModelData(index.column(), value);
+        (*(m_data.begin()+index.row())).setModelData(index.column(), value);
+        //m_data[index.row()].setModelData(index.column(), value);
         emit dataChanged(index, index);
         return true;
     }
@@ -76,16 +78,30 @@ bool CXATestDataTableModel::insertModelData(int row, const STestData &data)
     if(row<0||row>rowCount()){
         return false;
     }
-    beginInsertRows(QModelIndex(),row,row);
-    m_data.insert(row,data);
-    endInsertRows();
+    bool alredyExist = m_data.contains(row);
+    auto it = m_data.insert(row,data);
+    ulong pos = 0;
+    while(it!=m_data.begin()){
+        pos++;
+        it--;
+    }
+    if(!alredyExist){
+        beginInsertRows(QModelIndex(),pos,pos);
+        endInsertRows();
+    }
+    emit dataChanged(this->index(pos,0,QModelIndex()),this->index(pos,m_columnCount-1,QModelIndex()));
     return true;
 }
 
 bool CXATestDataTableModel::appendModelData(const STestData &data)
 {
+    if(m_data.contains(data.curTestRunTime)){
+        insertModelData(data.curTestRunTime, data);
+        return true;
+    }
     beginInsertRows(QModelIndex(),rowCount(),rowCount());
-    m_data.append(data);
+    //m_data.append(data);
+    m_data.insert(data.curTestRunTime,data);
     endInsertRows();
     return true;
 }
@@ -100,11 +116,17 @@ void CXATestDataTableModel::clearModelData()
 void CXATestDataTableModel::setModelData(const QList<STestData> &datas)
 {
     beginResetModel();
-    m_data = datas;
+    //m_data = datas;
     endResetModel();
 }
 
 Qt::ItemFlags CXATestDataTableModel::flags(const QModelIndex &index) const
 {
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+}
+
+void CXATestDataTableModel::adjustModelData()
+{
+    beginResetModel();
+    endResetModel();
 }
