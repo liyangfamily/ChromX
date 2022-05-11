@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <JsonHelper/cxajsontestparamset.h>
+#include <TransUiValueConvertor/cxatestparamsetconvertor.h>
 #include <QScopedPointer>
 namespace Ui {
 class CXATestParamSet;
@@ -54,9 +55,9 @@ private:
     void updateUIFromJson();
     void updateJsonFromUI();
 
-    void showTableValueFromJson(QTableWidget* table,STimeCtrl* timeCtrl ,SPIDCtrl* PIDCtrl,int rowSize,bool autoPID);
+    void showTableValueFromJson(QTableWidget* table, SUiTimeCtrl* uiTimeCtrl, SUiPIDCtrl* uiPIDCtrl, int rowSize, bool autoPID);
     void showTableValueFromJson(QTableWidget* table,SPressureCtrl* pressureMode ,int rowSize);
-    void getTableValueToJson(QTableWidget* table,STimeCtrl* timeCtrl ,SPIDCtrl* PIDCtrl,int rowSize);
+    void getTableValueToJson(QTableWidget *table, SUiTimeCtrl *uiTimeCtrl, SUiPIDCtrl *uiPIDCtrl, int rowSize);
     void getTableValueToJson(QTableWidget* table,SPressureCtrl* pressureMode ,int rowSize);
     void computTablePIDValue(QTableWidget* table,int rowIndex = -1);
     void changeTabelShowMode(QTableWidget* table,bool autoPID);

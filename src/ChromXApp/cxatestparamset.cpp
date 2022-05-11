@@ -5,6 +5,7 @@
 #include "icore.h"
 
 #include <JsonHelper/cxajsontestparamset.h>
+#include <TransUiValueConvertor/cxatestparamsetconvertor.h>
 #include <Chart/cxachartwidget.h>
 #include <CCE_ChromXItem/CCEChromXDevice>
 
@@ -196,56 +197,62 @@ bool CXATestParamSet::exportTemplateFile()
 void CXATestParamSet::updateUIFromJson()
 {
     STestParamSet tempParam = m_jsonTestParamSet->testParam();
+    SUiTestParamSet uiTempParam;
+
+    CXATestParamSetConvertor temporary;
+    temporary.convertTestParamSetToUi(tempParam, uiTempParam);
     //Base Settings
     ui->lineEdit_configName->setText(m_jsonTestParamSet->name());
-    ui->spinBox_cleaningTime->setValue(tempParam.runParamSet.cleaningTime);
-    ui->spinBox_samplingTime->setValue(tempParam.runParamSet.samplingTime);
-    ui->spinBox_samplingPumpVolt->setValue(tempParam.runParamSet.samplingPumpVoltage);
-    ui->spinBox_EPCControlVolt->setValue(tempParam.runParamSet.EPCControlVoltage);
+
+    ui->spinBox_cleaningTime->setValue(uiTempParam.runParamSet.cleaningTime);
+    ui->spinBox_samplingTime->setValue(uiTempParam.runParamSet.samplingTime);
+    ui->spinBox_samplingPumpVolt->setValue(uiTempParam.runParamSet.samplingPumpVoltage);
+    ui->spinBox_EPCControlVolt->setValue(uiTempParam.runParamSet.EPCControlVoltage);
 
     //PID Settings
-    ui->doubleSpinBox_TD_P->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_TD,SPIDAll::EPID_P));
-    ui->doubleSpinBox_TD_I->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_TD,SPIDAll::EPID_I));
-    ui->doubleSpinBox_TD_D->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_TD,SPIDAll::EPID_D));
+    ui->doubleSpinBox_TD_P->setValue(uiTempParam.PIDAll.TD_PID_P_Parma);
+    ui->doubleSpinBox_TD_I->setValue(uiTempParam.PIDAll.TD_PID_I_Parma);
+    ui->doubleSpinBox_TD_D->setValue(uiTempParam.PIDAll.TD_PID_D_Parma);
 
-    ui->doubleSpinBox_TI_P->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_TI,SPIDAll::EPID_P));
-    ui->doubleSpinBox_TI_I->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_TI,SPIDAll::EPID_I));
-    ui->doubleSpinBox_TI_D->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_TI,SPIDAll::EPID_D));
+    ui->doubleSpinBox_TI_P->setValue(uiTempParam.PIDAll.TI_PID_P_Parma);
+    ui->doubleSpinBox_TI_I->setValue(uiTempParam.PIDAll.TI_PID_I_Parma);
+    ui->doubleSpinBox_TI_D->setValue(uiTempParam.PIDAll.TI_PID_D_Parma);
 
-    ui->doubleSpinBox_COLUMN_P->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_COLUMN,SPIDAll::EPID_P));
-    ui->doubleSpinBox_COLUMN_I->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_COLUMN,SPIDAll::EPID_I));
-    ui->doubleSpinBox_COLUMN_D->setValue(tempParam.PIDAll.getValueToUI(SPIDAll::ED_COLUMN,SPIDAll::EPID_D));
+    ui->doubleSpinBox_COLUMN_P->setValue(uiTempParam.PIDAll.COLUMN_PID_P_Parma);
+    ui->doubleSpinBox_COLUMN_I->setValue(uiTempParam.PIDAll.COLUMN_PID_I_Parma);
+    ui->doubleSpinBox_COLUMN_D->setValue(uiTempParam.PIDAll.COLUMN_PID_D_Parma);
 
     //Dector
-    ui->spinBox_baseLineVolt->setValue(tempParam.runParamSet.microPIDCtrl.baseLineVoltage);
-    ui->spinBox_plasmaFreq->setValue(tempParam.runParamSet.microPIDCtrl.plasmaFreq);
-    ui->spinBox_samplingFreq->setValue(tempParam.runParamSet.microPIDCtrl.samplingFreq);
+    SUiMicroPIDCtrl& uiMicroPIDCtrl = uiTempParam.runParamSet.microPIDCtrl;
+    ui->spinBox_baseLineVolt->setValue(uiMicroPIDCtrl.baseLineVoltage);
+    ui->spinBox_plasmaFreq->setValue(uiMicroPIDCtrl.plasmaFreq);
+    ui->spinBox_samplingFreq->setValue(uiMicroPIDCtrl.samplingFreq);
 
     //FANS
-    ui->spinBox_COLUMNFanCloseTemperature->setValue(tempParam.runParamSet.COLUMNFanCloseTemperature);
+    ui->doubleSpinBox_COLUMNFanCloseTemperature->setValue(uiTempParam.runParamSet.COLUMNFanCloseTemperature);
 
     //TD
-    STDCtrl& TDCtrl = tempParam.runParamSet.TDCtrl;
-    ui->comboBox_TD_Mode->setCurrentIndex((bool)TDCtrl.controlMode);
-    ui->spinBox_TD_CounterBlowingTime->setValue(TDCtrl.CounterBlowingTime);
-    ui->checkBox_TD_TestPcg->setChecked((bool)TDCtrl.BeforeTDStartup_TestPCG);
-    ui->spinBox_TD_LowLimit->setValue(TDCtrl.TDStart_CarrierPressure_LowLimit);
-    ui->spinBox_TD_UpLimit->setValue(TDCtrl.TDStart_CarrierPressure_UpLimit);
-    ui->checkBox_TD_TestTITemper->setChecked((bool)TDCtrl.BeforeTDStartup_TestTITemperature);
-    ui->spinBox_TD_TITemperMax->setValue(TDCtrl.BeforeTDStartup_TITemperature_Max); //TODO: 公式计算
-    showTableValueFromJson(ui->tableWidgetTD,TDCtrl.timeCtrlArray,TDCtrl.PIDCtrlArray,5,TDCtrl.controlMode);
+    SUiTDCtrl& uiTDCtrl = uiTempParam.runParamSet.TDCtrl;
+    ui->comboBox_TD_Mode->setCurrentIndex(uiTDCtrl.controlMode);
+    ui->spinBox_TD_CounterBlowingTime->setValue(uiTDCtrl.CounterBlowingTime);
+    ui->checkBox_TD_TestPcg->setChecked(uiTDCtrl.BeforeTDStartup_TestPCG);
+    ui->spinBox_TD_LowLimit->setValue(uiTDCtrl.TDStart_CarrierPressure_LowLimit);
+    ui->spinBox_TD_UpLimit->setValue(uiTDCtrl.TDStart_CarrierPressure_UpLimit);
+    ui->checkBox_TD_TestTITemper->setChecked(uiTDCtrl.BeforeTDStartup_TestTITemperature);
+    ui->doubleSpinBox_TD_TITemperMax->setValue(uiTDCtrl.BeforeTDStartup_TITemperature_Max); //TODO: 公式计算
+    showTableValueFromJson(ui->tableWidgetTD, uiTDCtrl.timeCtrlArray, uiTDCtrl.PIDCtrlArray, 5, uiTDCtrl.controlMode);
 
     //TI
-    STICtrl& TICtrl = tempParam.runParamSet.TICtrl;
-    ui->comboBox_TI_Mode->setCurrentIndex((bool)TICtrl.controlMode);
-    ui->checkBox_TI_TestMicroPID->setChecked((bool)TICtrl.BeforeTIStartup_TestMicroPID);
-    ui->doubleSpinBox_TI_MicroPIDValueMin->setValue(TICtrl.BeforeTIStartup_MicroPIDValue_Min);
-    showTableValueFromJson(ui->tableWidgetTI,TICtrl.timeCtrlArray,TICtrl.PIDCtrlArray,5,TICtrl.controlMode);
+    SUiTICtrl& uiTICtrl = uiTempParam.runParamSet.TICtrl;
+    ui->comboBox_TI_Mode->setCurrentIndex(uiTICtrl.controlMode);
+    ui->checkBox_TI_TestMicroPID->setChecked(uiTICtrl.BeforeTIStartup_TestMicroPID);
+    ui->doubleSpinBox_TI_MicroPIDValueMin->setValue(uiTICtrl.BeforeTIStartup_MicroPIDValue_Min);
+    showTableValueFromJson(ui->tableWidgetTI, uiTICtrl.timeCtrlArray, uiTICtrl.PIDCtrlArray, 5, uiTICtrl.controlMode);
 
     //COLUMN
-    SCOLUMNCtrl& COLUMNCtrl = tempParam.runParamSet.COLUMNCtrl;
-    ui->comboBox_COLUMN_Mode->setCurrentIndex((bool)COLUMNCtrl.controlMode);
-    showTableValueFromJson(ui->tableWidgetCOLUMN,COLUMNCtrl.timeCtrlArray,COLUMNCtrl.PIDCtrlArray,8,COLUMNCtrl.controlMode);
+    SUiCOLUMNCtrl& uiCOLUMNCtrl = uiTempParam.runParamSet.COLUMNCtrl;
+    ui->comboBox_COLUMN_Mode->setCurrentIndex(uiCOLUMNCtrl.controlMode);
+    showTableValueFromJson(ui->tableWidgetCOLUMN, uiCOLUMNCtrl.timeCtrlArray, uiCOLUMNCtrl.PIDCtrlArray, 8, uiCOLUMNCtrl.controlMode);
 
     //Pressure
     SPressureMode& PressureMode = tempParam.pressureMode;
@@ -255,81 +262,86 @@ void CXATestParamSet::updateUIFromJson()
 void CXATestParamSet::updateJsonFromUI()
 {
     STestParamSet tempParam = m_jsonTestParamSet->testParam();
+    SUiTestParamSet uiTempParam;
     //Base Settings
     m_jsonTestParamSet->setName(ui->lineEdit_configName->text());
-    tempParam.runParamSet.cleaningTime = ui->spinBox_cleaningTime->value();
-    tempParam.runParamSet.samplingTime = ui->spinBox_samplingTime->value();
-    tempParam.runParamSet.samplingPumpVoltage = ui->spinBox_samplingPumpVolt->value();
-    tempParam.runParamSet.EPCControlVoltage = ui->spinBox_EPCControlVolt->value();
+    uiTempParam.runParamSet.cleaningTime = ui->spinBox_cleaningTime->value();
+    uiTempParam.runParamSet.samplingTime = ui->spinBox_samplingTime->value();
+    uiTempParam.runParamSet.samplingPumpVoltage = ui->spinBox_samplingPumpVolt->value();
+    uiTempParam.runParamSet.EPCControlVoltage = ui->spinBox_EPCControlVolt->value();
 
-    tempParam.runParamSet.testData_AutoRepo = 1;
+    uiTempParam.runParamSet.testData_AutoRepo = 1;
     //PID Settings
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_TD,SPIDAll::EPID_P,ui->doubleSpinBox_TD_P->value());
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_TD,SPIDAll::EPID_I,ui->doubleSpinBox_TD_I->value());
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_TD,SPIDAll::EPID_D,ui->doubleSpinBox_TD_D->value());
+    uiTempParam.PIDAll.TD_PID_P_Parma = ui->doubleSpinBox_TD_P->value();
+    uiTempParam.PIDAll.TD_PID_I_Parma = ui->doubleSpinBox_TD_I->value();
+    uiTempParam.PIDAll.TD_PID_D_Parma = ui->doubleSpinBox_TD_D->value();
 
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_TI,SPIDAll::EPID_P,ui->doubleSpinBox_TI_P->value());
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_TI,SPIDAll::EPID_I,ui->doubleSpinBox_TI_I->value());
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_TI,SPIDAll::EPID_D,ui->doubleSpinBox_TI_D->value());
+    uiTempParam.PIDAll.TI_PID_P_Parma = ui->doubleSpinBox_TI_P->value();
+    uiTempParam.PIDAll.TI_PID_I_Parma = ui->doubleSpinBox_TI_I->value();
+    uiTempParam.PIDAll.TI_PID_D_Parma = ui->doubleSpinBox_TI_D->value();
 
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_COLUMN,SPIDAll::EPID_P,ui->doubleSpinBox_COLUMN_P->value());
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_COLUMN,SPIDAll::EPID_I,ui->doubleSpinBox_COLUMN_I->value());
-    tempParam.PIDAll.setValueFromUI(SPIDAll::ED_COLUMN,SPIDAll::EPID_D,ui->doubleSpinBox_COLUMN_D->value());
+    uiTempParam.PIDAll.COLUMN_PID_P_Parma = ui->doubleSpinBox_COLUMN_P->value();
+    uiTempParam.PIDAll.COLUMN_PID_I_Parma = ui->doubleSpinBox_COLUMN_I->value();
+    uiTempParam.PIDAll.COLUMN_PID_D_Parma = ui->doubleSpinBox_COLUMN_D->value();
 
     //Dector
-    tempParam.runParamSet.microPIDCtrl.baseLineVoltage = ui->spinBox_baseLineVolt->value();
-    tempParam.runParamSet.microPIDCtrl.plasmaFreq = ui->spinBox_plasmaFreq->value();
-    tempParam.runParamSet.microPIDCtrl.samplingFreq = ui->spinBox_samplingFreq->value();
+    SUiMicroPIDCtrl& uiMicroPIDCtrl = uiTempParam.runParamSet.microPIDCtrl;
+    uiMicroPIDCtrl.baseLineVoltage = ui->spinBox_baseLineVolt->value();
+    uiMicroPIDCtrl.plasmaFreq = ui->spinBox_plasmaFreq->value();
+    uiMicroPIDCtrl.samplingFreq = ui->spinBox_samplingFreq->value();
 
     //FANS
-    tempParam.runParamSet.COLUMNFanCloseTemperature = ui->spinBox_COLUMNFanCloseTemperature->value();
+    uiTempParam.runParamSet.COLUMNFanCloseTemperature = ui->doubleSpinBox_COLUMNFanCloseTemperature->value();
 
     //TD
-    STDCtrl& TDCtrl = tempParam.runParamSet.TDCtrl;
-    TDCtrl.controlMode = (bool)ui->comboBox_TD_Mode->currentIndex();
-    TDCtrl.CounterBlowingTime = ui->spinBox_TD_CounterBlowingTime->value();
-    TDCtrl.BeforeTDStartup_TestPCG = ui->checkBox_TD_TestPcg->isChecked();
-    TDCtrl.TDStart_CarrierPressure_LowLimit = ui->spinBox_TD_LowLimit->value();
-    TDCtrl.TDStart_CarrierPressure_UpLimit = ui->spinBox_TD_UpLimit->value();
-    TDCtrl.BeforeTDStartup_TestTITemperature = ui->checkBox_TD_TestTITemper->isChecked();
-    TDCtrl.BeforeTDStartup_TITemperature_Max = ui->spinBox_TD_TITemperMax->value();
-    getTableValueToJson(ui->tableWidgetTD,TDCtrl.timeCtrlArray,TDCtrl.PIDCtrlArray,5);
+    SUiTDCtrl& uiTDCtrl = uiTempParam.runParamSet.TDCtrl;
+    uiTDCtrl.controlMode = (bool)ui->comboBox_TD_Mode->currentIndex();
+    uiTDCtrl.CounterBlowingTime = ui->spinBox_TD_CounterBlowingTime->value();
+    uiTDCtrl.BeforeTDStartup_TestPCG = ui->checkBox_TD_TestPcg->isChecked();
+    uiTDCtrl.TDStart_CarrierPressure_LowLimit = ui->spinBox_TD_LowLimit->value();
+    uiTDCtrl.TDStart_CarrierPressure_UpLimit = ui->spinBox_TD_UpLimit->value();
+    uiTDCtrl.BeforeTDStartup_TestTITemperature = ui->checkBox_TD_TestTITemper->isChecked();
+    uiTDCtrl.BeforeTDStartup_TITemperature_Max = ui->doubleSpinBox_TD_TITemperMax->value();
+    getTableValueToJson(ui->tableWidgetTD, uiTDCtrl.timeCtrlArray, uiTDCtrl.PIDCtrlArray, 5);
 
     //TI
-    STICtrl& TICtrl = tempParam.runParamSet.TICtrl;
-    TICtrl.controlMode = (bool)ui->comboBox_TI_Mode->currentIndex();
-    TICtrl.BeforeTIStartup_TestMicroPID = ui->checkBox_TI_TestMicroPID->isChecked();
-    TICtrl.BeforeTIStartup_MicroPIDValue_Min = ui->doubleSpinBox_TI_MicroPIDValueMin->value();
-    getTableValueToJson(ui->tableWidgetTI,TICtrl.timeCtrlArray,TICtrl.PIDCtrlArray,5);
+    SUiTICtrl& uiTICtrl = uiTempParam.runParamSet.TICtrl;
+    uiTICtrl.controlMode = (bool)ui->comboBox_TI_Mode->currentIndex();
+    uiTICtrl.BeforeTIStartup_TestMicroPID = ui->checkBox_TI_TestMicroPID->isChecked();
+    uiTICtrl.BeforeTIStartup_MicroPIDValue_Min = ui->doubleSpinBox_TI_MicroPIDValueMin->value();
+    getTableValueToJson(ui->tableWidgetTI, uiTICtrl.timeCtrlArray, uiTICtrl.PIDCtrlArray, 5);
 
     //COLUMN
-    SCOLUMNCtrl& COLUMNCtrl = tempParam.runParamSet.COLUMNCtrl;
-    COLUMNCtrl.controlMode = (bool)ui->comboBox_COLUMN_Mode->currentIndex();
-    getTableValueToJson(ui->tableWidgetCOLUMN,COLUMNCtrl.timeCtrlArray,COLUMNCtrl.PIDCtrlArray,8);
+    SUiCOLUMNCtrl& uiCOLUMNCtrl = uiTempParam.runParamSet.COLUMNCtrl;
+    uiCOLUMNCtrl.controlMode = (bool)ui->comboBox_COLUMN_Mode->currentIndex();
+    getTableValueToJson(ui->tableWidgetCOLUMN, uiCOLUMNCtrl.timeCtrlArray, uiCOLUMNCtrl.PIDCtrlArray, 8);
 
     //Pressure
     SPressureMode& PressureMode = tempParam.pressureMode;
-    getTableValueToJson(ui->tableWidgetPressure,PressureMode.pressureCtrlArray,8);
+    getTableValueToJson(ui->tableWidgetPressure, PressureMode.pressureCtrlArray, 8);
+
+    CXATestParamSetConvertor temporary;
+    temporary.convertTestParamSetFromUi(uiTempParam, tempParam);
 
     m_jsonTestParamSet->setTestParam(tempParam);
 }
 
-void CXATestParamSet::showTableValueFromJson(QTableWidget *table, STimeCtrl *timeCtrl, SPIDCtrl *PIDCtrl, int rowSize,bool autoPID)
+void CXATestParamSet::showTableValueFromJson(QTableWidget* table, SUiTimeCtrl* uiTimeCtrl, SUiPIDCtrl* uiPIDCtrl, int rowSize, bool autoPID)
 {
-    if(!table||!timeCtrl||!PIDCtrl){
+    if(!table||!uiTimeCtrl||!uiPIDCtrl){
         return;
     }
     const int RowCount = rowSize;
     table->clearContents();
     table->setRowCount(RowCount);//总行数
     for(int i = 0;i<RowCount;++i){
-        STimeCtrl& tempTimeCtrl = timeCtrl[i];
-        SPIDCtrl& tempPIDCtrl = PIDCtrl[i];
+        SUiTimeCtrl& tempTimeCtrl = uiTimeCtrl[i];
+        SUiPIDCtrl& tempPIDCtrl = uiPIDCtrl[i];
 
         table->setItem(i, ECol_PIDTimeValue, new QTableWidgetItem(QString::number(tempPIDCtrl.timeValue)));
         table->item(i, ECol_PIDTimeValue)->setTextAlignment(Qt::AlignCenter);
 
-        QString str = QString::number(double(tempPIDCtrl.temperatureValue)/10.0,'f',1);
+        QString str = QString::number(tempPIDCtrl.temperatureValue, 'd', 1);
         table->setItem(i, ECol_PIDTemperValue, new QTableWidgetItem(str)); //TODO: 公式计算
         table->item(i, ECol_PIDTemperValue)->setTextAlignment(Qt::AlignCenter);
 
@@ -362,21 +374,21 @@ void CXATestParamSet::showTableValueFromJson(QTableWidget *table, SPressureCtrl 
     }
 }
 
-void CXATestParamSet::getTableValueToJson(QTableWidget *table, STimeCtrl *timeCtrl, SPIDCtrl *PIDCtrl,int rowSize)
+void CXATestParamSet::getTableValueToJson(QTableWidget *table, SUiTimeCtrl *uiTimeCtrl, SUiPIDCtrl *uiPIDCtrl, int rowSize)
 {
-    if(!table||!timeCtrl||!PIDCtrl){
+    if(!table||!uiTimeCtrl||!uiPIDCtrl){
         return;
     }
     const int RowCount = table->rowCount();
     if(rowSize!=RowCount){
         return;
     }
-    for(int i = 0;i<RowCount;++i){
-        STimeCtrl& tempTimeCtrl = timeCtrl[i];
-        SPIDCtrl& tempPIDCtrl = PIDCtrl[i];
+    for(int i = 0; i < RowCount; ++i) {
+        SUiTimeCtrl& tempTimeCtrl = uiTimeCtrl[i];
+        SUiPIDCtrl& tempPIDCtrl = uiPIDCtrl[i];
 
         tempPIDCtrl.timeValue = table->item(i, ECol_PIDTimeValue)->text().toUShort();
-        tempPIDCtrl.temperatureValue = table->item(i, ECol_PIDTemperValue)->text().toUShort();
+        tempPIDCtrl.temperatureValue = table->item(i, ECol_PIDTemperValue)->text().toDouble();
 
         tempTimeCtrl.timeValue = table->item(i, ECol_TimeValue)->text().toUShort();
         tempTimeCtrl.PWMValue = table->item(i, ECol_TimePWMValue)->text().toUShort();

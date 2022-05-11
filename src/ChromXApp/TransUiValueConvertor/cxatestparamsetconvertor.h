@@ -32,6 +32,7 @@ typedef struct tagUiPIDCtrl{
 }SUiPIDCtrl;
 
 typedef struct tagUiTDCtrl{
+    quint8  CounterBlowingTime;
     bool  BeforeTDStartup_TestPCG;
     quint16 TDStart_CarrierPressure_UpLimit;
     quint16 TDStart_CarrierPressure_LowLimit;

@@ -29,7 +29,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,1">
@@ -433,12 +433,18 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_COLUMNFanCloseTemperature">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_COLUMNFanCloseTemperature">
                 <property name="suffix">
                  <string>℃</string>
                 </property>
+                <property name="decimals">
+                 <number>1</number>
+                </property>
+                <property name="minimum">
+                 <double>0.000000000000000</double>
+                </property>
                 <property name="maximum">
-                 <number>65535</number>
+                 <double>500.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -597,16 +603,6 @@
                 </item>
                </layout>
               </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="spinBox_TD_TITemperMax">
-                <property name="suffix">
-                 <string>℃</string>
-                </property>
-                <property name="maximum">
-                 <number>65535</number>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_17">
                 <property name="text">
@@ -637,6 +633,16 @@
                 </property>
                 <property name="text">
                  <string>Start conditions</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_TD_TITemperMax">
+                <property name="suffix">
+                 <string>℃</string>
+                </property>
+                <property name="decimals">
+                 <number>1</number>
                 </property>
                </widget>
               </item>

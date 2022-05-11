@@ -9,6 +9,7 @@ HEADERS += \
     $$PWD/Chart/cxasinglestatustablemodel.h \
     $$PWD/Chart/cxatestdatatablemodel.h \
     $$PWD/JsonHelper/cxajsontestparamset.h \
+    $$PWD/TransUiValueConvertor/cxatestdataconvertor.h \
     $$PWD/TransUiValueConvertor/cxatestparamsetconvertor.h \
     $$PWD/app.h \
     $$PWD/Chart/cxacustomchartview.h \
@@ -21,6 +22,7 @@ SOURCES += \
     $$PWD/Chart/cxasinglestatustablemodel.cpp \
     $$PWD/Chart/cxatestdatatablemodel.cpp \
     $$PWD/JsonHelper/cxajsontestparamset.cpp \
+    $$PWD/TransUiValueConvertor/cxatestdataconvertor.cpp \
     $$PWD/TransUiValueConvertor/cxatestparamsetconvertor.cpp \
     $$PWD/app.cpp \
     $$PWD/Chart/cxacustomchartview.cpp \
