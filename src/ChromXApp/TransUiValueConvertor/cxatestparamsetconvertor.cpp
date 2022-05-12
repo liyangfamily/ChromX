@@ -30,15 +30,16 @@ void CXATestParamSetConvertor::convertPIDCtrlParamToUi(const SPIDCtrl &m_PIDCtrl
 {
     m_uiPIDCtrl.temperatureValue = CCEUIHelper::resistanceToTemper(m_PIDCtrl.temperatureValue);
 
-    m_uiPIDCtrl.timeValue = m_uiPIDCtrl.timeValue;
-    m_uiPIDCtrl.PWMValue_Max = m_uiPIDCtrl.PWMValue_Max;
-    m_uiPIDCtrl.PWMValue_Min = m_uiPIDCtrl.PWMValue_Min;
+    m_uiPIDCtrl.timeValue = m_PIDCtrl.timeValue;
+    m_uiPIDCtrl.PWMValue_Max = m_PIDCtrl.PWMValue_Max;
+    m_uiPIDCtrl.PWMValue_Min = m_PIDCtrl.PWMValue_Min;
 }
 
 void CXATestParamSetConvertor::convertTDCtrlParamFromUi(const SUiTDCtrl &m_uiTDCtrl, STDCtrl &m_TDCtrl)
 {
     m_TDCtrl.BeforeTDStartup_TITemperature_Max = CCEUIHelper::temperToResistance(m_uiTDCtrl.BeforeTDStartup_TITemperature_Max);
 
+    m_TDCtrl.CounterBlowingTime = m_uiTDCtrl.CounterBlowingTime;
     m_TDCtrl.BeforeTDStartup_TestPCG = m_uiTDCtrl.BeforeTDStartup_TestPCG;
     m_TDCtrl.TDStart_CarrierPressure_UpLimit = m_uiTDCtrl.TDStart_CarrierPressure_UpLimit;
     m_TDCtrl.TDStart_CarrierPressure_LowLimit = m_uiTDCtrl.TDStart_CarrierPressure_LowLimit;
@@ -53,8 +54,9 @@ void CXATestParamSetConvertor::convertTDCtrlParamFromUi(const SUiTDCtrl &m_uiTDC
 
 void CXATestParamSetConvertor::convertTDCtrlParamToUi(const STDCtrl &m_TDCtrl, SUiTDCtrl &m_uiTDCtrl)
 {
-    m_uiTDCtrl.BeforeTDStartup_TITemperature_Max = CCEUIHelper::resistanceToTemper(m_uiTDCtrl.BeforeTDStartup_TITemperature_Max);
+    m_uiTDCtrl.BeforeTDStartup_TITemperature_Max = CCEUIHelper::resistanceToTemper(m_TDCtrl.BeforeTDStartup_TITemperature_Max);
 
+    m_uiTDCtrl.CounterBlowingTime = m_TDCtrl.CounterBlowingTime;
     m_uiTDCtrl.BeforeTDStartup_TestPCG = m_TDCtrl.BeforeTDStartup_TestPCG;
     m_uiTDCtrl.TDStart_CarrierPressure_UpLimit = m_TDCtrl.TDStart_CarrierPressure_UpLimit;
     m_uiTDCtrl.TDStart_CarrierPressure_LowLimit = m_TDCtrl.TDStart_CarrierPressure_LowLimit;
@@ -144,17 +146,17 @@ void CXATestParamSetConvertor::convertPIDAllParamFromUi(const SUiPIDAll &m_uiPID
 
 void CXATestParamSetConvertor::convertPIDAllParamToUi(const SPIDAll &m_PIDparam, SUiPIDAll &m_uiPIDparam)
 {
-    m_uiPIDparam.TD_PID_P_Parma = m_PIDparam.TD_PID_P_Parma / 1000000;
-    m_uiPIDparam.TD_PID_I_Parma = m_PIDparam.TD_PID_I_Parma / 1000000;
-    m_uiPIDparam.TD_PID_D_Parma = m_PIDparam.TD_PID_D_Parma / 1000000;
+    m_uiPIDparam.TD_PID_P_Parma = static_cast<double>(m_PIDparam.TD_PID_P_Parma) / 1000000;
+    m_uiPIDparam.TD_PID_I_Parma = static_cast<double>(m_PIDparam.TD_PID_I_Parma) / 1000000;
+    m_uiPIDparam.TD_PID_D_Parma = static_cast<double>(m_PIDparam.TD_PID_D_Parma) / 1000000;
 
-    m_uiPIDparam.TI_PID_P_Parma = m_PIDparam.TI_PID_P_Parma / 1000000;
-    m_uiPIDparam.TI_PID_I_Parma = m_PIDparam.TI_PID_I_Parma / 1000000;
-    m_uiPIDparam.TI_PID_D_Parma = m_PIDparam.TI_PID_D_Parma / 1000000;
+    m_uiPIDparam.TI_PID_P_Parma = static_cast<double>(m_PIDparam.TI_PID_P_Parma) / 1000000;
+    m_uiPIDparam.TI_PID_I_Parma = static_cast<double>(m_PIDparam.TI_PID_I_Parma) / 1000000;
+    m_uiPIDparam.TI_PID_D_Parma = static_cast<double>(m_PIDparam.TI_PID_D_Parma) / 1000000;
 
-    m_uiPIDparam.COLUMN_PID_P_Parma = m_PIDparam.COLUMN_PID_P_Parma / 1000000;
-    m_uiPIDparam.COLUMN_PID_I_Parma = m_PIDparam.COLUMN_PID_I_Parma / 1000000;
-    m_uiPIDparam.COLUMN_PID_D_Parma = m_PIDparam.COLUMN_PID_D_Parma / 1000000;
+    m_uiPIDparam.COLUMN_PID_P_Parma = static_cast<double>(m_PIDparam.COLUMN_PID_P_Parma) / 1000000;
+    m_uiPIDparam.COLUMN_PID_I_Parma = static_cast<double>(m_PIDparam.COLUMN_PID_I_Parma) / 1000000;
+    m_uiPIDparam.COLUMN_PID_D_Parma = static_cast<double>(m_PIDparam.COLUMN_PID_D_Parma) / 1000000;
 }
 
 void CXATestParamSetConvertor::convertRunParamSetFromUi(const SUiRunParamSet &m_uiRunParamSet, SRunParamSet &m_runParamSet)

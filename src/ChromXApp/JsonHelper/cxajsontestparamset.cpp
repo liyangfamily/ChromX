@@ -147,7 +147,7 @@ bool CXAJsonTDCtrl::buildJson(QJsonDocument &doc, const qint8 version)
 {
     Q_UNUSED(version);
     QJsonObject jsonTDCtrlObj;
-    jsonTDCtrlObj["CounterBlowingTime"] = m_data.BeforeTDStartup_TestPCG;
+    jsonTDCtrlObj["CounterBlowingTime"] = m_data.CounterBlowingTime;
     jsonTDCtrlObj["BeforeTDStartup_TestPCG"] = m_data.BeforeTDStartup_TestPCG;
     jsonTDCtrlObj["TDStart_CarrierPressure_UpLimit"] = m_data.TDStart_CarrierPressure_UpLimit;
     jsonTDCtrlObj["TDStart_CarrierPressure_LowLimit"] = m_data.TDStart_CarrierPressure_LowLimit;

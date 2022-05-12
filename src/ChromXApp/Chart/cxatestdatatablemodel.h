@@ -1,8 +1,9 @@
-#ifndef CXATESTDATATABLEMODEL_H
+﻿#ifndef CXATESTDATATABLEMODEL_H
 #define CXATESTDATATABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <CCE_CommunicatEngine/CCEInteCtrlPackageStruct.h>
+#include <TransUiValueConvertor/cxatestdataconvertor.h>
 
 class CXATestDataTableModel : public QAbstractTableModel
 {
