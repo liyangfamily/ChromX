@@ -100,7 +100,6 @@ bool CXATestDataTableModel::appendModelData(const STestData &data)
         return true;
     }
     beginInsertRows(QModelIndex(),rowCount(),rowCount());
-    //m_data.append(data);
     m_data.insert(data.curTestRunTime,data);
     endInsertRows();
     return true;
@@ -116,7 +115,6 @@ void CXATestDataTableModel::clearModelData()
 void CXATestDataTableModel::setModelData(const QList<STestData> &datas)
 {
     beginResetModel();
-    //m_data = datas;
     endResetModel();
 }
 

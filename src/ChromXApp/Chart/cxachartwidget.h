@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QtCharts/QChart>
+#include <CCE_CommunicatEngine/CCEPackageDispatcher>
 
 namespace Ui {
 class CXATestParamSetChart;
@@ -79,6 +80,7 @@ private:
         QtCharts::QAbstractSeries* scatterSeries = nullptr;
     };
     QList<SSeriesInfo> m_seriesInfoList;
+
 private:
     //初始化函数
     void initUI();
@@ -89,10 +91,17 @@ private:
     //添加通道和设置通道可见
     void addChannel(EDataChannel channel, QString name,int modelXCol,int modelYCol,QtCharts::QValueAxis* x,QtCharts::QValueAxis* y);
     void setSeriesVisible(QtCharts::QAbstractSeries* obj,bool visible);
+    SSeriesInfo*  channelInfo(EDataChannel channel);
+    void replaceChannelData(EDataChannel channel, const QList<QPointF>& data);
 
-    //更新纵坐标最大值
-    void updateYMax(qreal max);
-    void updateY2Max(qreal max);
+    //更新坐标
+    void updateXMax(qreal curValue,bool rightnow = true);
+    //更新测试数据
+    void updateYMax(STestData curData,bool rightnow = true);
+    void updateY2Max(STestData curData,bool rightnow = true);
+    //更新单控
+    void updateYMax(SSingleStatus curData);
+    void updateY2Max(SSingleStatus curData);
 
     //监听处理函数
     quint16 handle_TestData_Read_AllInfo(const QByteArray & data);
@@ -114,7 +123,7 @@ public slots:
     void slot_fitInView();
     void slot_checkedDynamicMode(bool checked);
     void slot_clearChart();
-    void slot_test();
+    void slot_importCSV();
 };
 
 #endif // CXACHARTWIDGET_H
