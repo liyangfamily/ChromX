@@ -5,6 +5,7 @@ FORMS += \
     mainwindow.ui
 
 HEADERS += \
+    $$PWD/CSVHelper/cxacsvhelper.h \
     $$PWD/Chart/cxachartwidget.h \
     $$PWD/Chart/cxasinglestatustablemodel.h \
     $$PWD/Chart/cxatestdatatablemodel.h \
@@ -18,6 +19,7 @@ HEADERS += \
     mainwindow.h
 
 SOURCES += \
+    $$PWD/CSVHelper/cxacsvhelper.cpp \
     $$PWD/Chart/cxachartwidget.cpp \
     $$PWD/Chart/cxasinglestatustablemodel.cpp \
     $$PWD/Chart/cxatestdatatablemodel.cpp \

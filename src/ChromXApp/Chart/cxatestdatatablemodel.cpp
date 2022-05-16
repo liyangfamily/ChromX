@@ -51,9 +51,9 @@ QVariant CXATestDataTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole) {
-        return m_data[index.row()].getModelData(index.column());
+        return colData(index);
     } else if (role == Qt::EditRole) {
-        return m_data[index.row()].getModelData(index.column());
+        return colData(index);
     } else if (role == Qt::BackgroundRole) {
         // cell not mapped return white color
         return QColor(Qt::white);
@@ -64,28 +64,41 @@ QVariant CXATestDataTableModel::data(const QModelIndex &index, int role) const
 bool CXATestDataTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid() && role == Qt::EditRole) {
-        m_data[index.row()].setModelData(index.column(), value);
+        setColData(index,value);
         emit dataChanged(index, index);
         return true;
     }
     return false;
 }
 
-bool CXATestDataTableModel::insertModelData(int row, const STestData &data)
+bool CXATestDataTableModel::insertModelData(int row, const SUiTestData &data)
 {
     if(row<0||row>rowCount()){
         return false;
     }
-    beginInsertRows(QModelIndex(),row,row);
-    m_data.insert(row,data);
-    endInsertRows();
+    bool alredyExist = m_data.contains(row);
+    auto it = m_data.insert(row,data);
+    ulong pos = 0;
+    while(it!=m_data.begin()){
+        pos++;
+        it--;
+    }
+    if(!alredyExist){
+        beginInsertRows(QModelIndex(),pos,pos);
+        endInsertRows();
+    }
+    emit dataChanged(this->index(pos,0,QModelIndex()),this->index(pos,m_columnCount-1,QModelIndex()));
     return true;
 }
 
-bool CXATestDataTableModel::appendModelData(const STestData &data)
+bool CXATestDataTableModel::appendModelData(const SUiTestData &data)
 {
+    if(m_data.contains(data.curTestRunTime)){
+        insertModelData(data.curTestRunTime, data);
+        return true;
+    }
     beginInsertRows(QModelIndex(),rowCount(),rowCount());
-    m_data.append(data);
+    m_data.insert(data.curTestRunTime,data);
     endInsertRows();
     return true;
 }
@@ -97,14 +110,71 @@ void CXATestDataTableModel::clearModelData()
     endResetModel();
 }
 
-void CXATestDataTableModel::setModelData(const QList<STestData> &datas)
+void CXATestDataTableModel::setModelData(const QList<SUiTestData> &datas,bool blockSignal)
 {
-    beginResetModel();
-    m_data = datas;
-    endResetModel();
+    m_data.clear();
+    for(auto&& item:datas){
+        m_data.insert(item.curTestRunTime,item);
+    }
+    if(!blockSignal){
+        beginResetModel();
+        endResetModel();
+    }
+}
+
+QList<SUiTestData> CXATestDataTableModel::modelData() const
+{
+    return m_data.values();
 }
 
 Qt::ItemFlags CXATestDataTableModel::flags(const QModelIndex &index) const
 {
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+}
+
+void CXATestDataTableModel::adjustModelData()
+{
+    beginResetModel();
+    endResetModel();
+}
+
+void CXATestDataTableModel::setColData(const QModelIndex &index, const QVariant &value)
+{
+    switch(index.column()){
+    case 0:
+        (*(m_data.begin()+index.row())).curTestRunTime = value.toInt();
+        break;
+    case 1:
+        (*(m_data.begin()+index.row())).TDCurTemperature = value.toDouble();
+        break;
+    case 2:
+        (*(m_data.begin()+index.row())).TICurTemperature = value.toDouble();
+        break;
+    case 3:
+        (*(m_data.begin()+index.row())).COLUMNTemperature = value.toDouble();
+        break;
+    case 4:
+        (*(m_data.begin()+index.row())).MicroPIDValue = value.toDouble();
+        break;
+    default:
+        break;
+    }
+}
+
+QVariant CXATestDataTableModel::colData(const QModelIndex &index) const
+{
+    switch(index.column()){
+    case 0:
+        return (*(m_data.begin()+index.row())).curTestRunTime;
+    case 1:
+        return (*(m_data.begin()+index.row())).TDCurTemperature;
+    case 2:
+        return (*(m_data.begin()+index.row())).TICurTemperature;
+    case 3:
+        return (*(m_data.begin()+index.row())).COLUMNTemperature;
+    case 4:
+        return (*(m_data.begin()+index.row())).MicroPIDValue;
+    default:
+        return QVariant();
+    }
 }

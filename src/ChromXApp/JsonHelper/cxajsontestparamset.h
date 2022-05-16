@@ -221,6 +221,7 @@ public:
     STestParamSet testParam() const{
         return m_data;
     };
+    static QString defaultFilePath();
 public:
     void resetJsonData();
 public:

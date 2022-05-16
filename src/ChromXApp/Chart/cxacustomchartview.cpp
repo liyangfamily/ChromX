@@ -74,7 +74,15 @@ void CXACustomChartView::mouseReleaseEvent(QMouseEvent *event)
         if (m_alreadySaveRange)
         {
             this->chart()->axisX()->setRange(m_xMin, m_xMax);
-            this->chart()->axisY()->setRange(m_yMin, m_yMax);
+            QList<QAbstractAxis*> axisList = this->chart()->axes(Qt::Vertical);
+            int index = 0;
+            for(auto&& item:axisList){
+                QValueAxis *axisY = dynamic_cast<QValueAxis*>(item);
+                if(index<m_yRangList.count()){
+                    axisY->setRange(m_yRangList.at(index).first,m_yRangList.at(index).second);
+                }
+                index++;
+            }
         }
     }
     QChartView::mouseReleaseEvent(event);
@@ -90,7 +98,16 @@ void CXACustomChartView::wheelEvent(QWheelEvent *event)
         m_alreadySaveRange = true;
     }
 
-    const double factor = 1.5;//缩放比例
+    const double factor = 1.35;//缩放比例
+//    if (event->delta() > 0)
+//    {//放大
+//        this->chart()->zoomIn();
+//    }
+//    else
+//    {//缩小
+//        this->chart()->zoomOut();
+//    }
+//    return;
     if (m_ctrlPress)
     {//Y轴
         QList<QAbstractAxis*> axisList = this->chart()->axes(Qt::Vertical);
@@ -208,9 +225,11 @@ void CXACustomChartView::saveAxisRange()
     QValueAxis *axisX = dynamic_cast<QValueAxis*>(this->chart()->axisX());
     m_xMin = axisX->min();
     m_xMax = axisX->max();
-    QValueAxis *axisY = dynamic_cast<QValueAxis*>(this->chart()->axisY());
-    m_yMin = axisY->min();
-    m_yMax = axisY->max();
+    QList<QAbstractAxis*> axisList = this->chart()->axes(Qt::Vertical);
+    for(auto&& item:axisList){
+        QValueAxis *axisY = dynamic_cast<QValueAxis*>(item);
+        m_yRangList.append(QPair<double,double>(axisY->min(),axisY->max()));
+    }
 
 }
 

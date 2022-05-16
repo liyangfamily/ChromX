@@ -186,8 +186,8 @@ private:
     void convertTimeCtrlFromUi(const SUiTimeCtrl& m_uiTimeCtrl, STimeCtrl& m_timeCtrl);
     void convertTimeCtrlToUi(const STimeCtrl& m_timeCtrl, SUiTimeCtrl& m_uiTimeCtrl);
 
-    void convertPIDCtrlParamFromUi(const SUiPIDCtrl& m_uiPIDCtrl, SPIDCtrl& m_PIDCtrl);
-    void convertPIDCtrlParamToUi(const SPIDCtrl& m_PIDCtrl, SUiPIDCtrl& m_uiPIDCtrl);
+    void convertPIDCtrlParamFromUi(const SUiPIDCtrl& m_uiPIDCtrl, SPIDCtrl& m_PIDCtrl,bool rtd = true);
+    void convertPIDCtrlParamToUi(const SPIDCtrl& m_PIDCtrl, SUiPIDCtrl& m_uiPIDCtrl,bool rtd = true);
 
     void convertTDCtrlParamFromUi(const SUiTDCtrl& m_uiTDCtrl, STDCtrl& m_TDCtrl);
     void convertTDCtrlParamToUi(const STDCtrl& m_TDCtrl, SUiTDCtrl& m_uiTDCtrl);

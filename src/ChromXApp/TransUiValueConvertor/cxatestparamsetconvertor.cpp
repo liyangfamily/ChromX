@@ -17,18 +17,27 @@ void CXATestParamSetConvertor::convertTimeCtrlToUi(const STimeCtrl &m_timeCtrl, 
     m_uiTimeCtrl.PWMValue = m_timeCtrl.PWMValue;
 }
 
-void CXATestParamSetConvertor::convertPIDCtrlParamFromUi(const SUiPIDCtrl &m_uiPIDCtrl, SPIDCtrl &m_PIDCtrl)
+void CXATestParamSetConvertor::convertPIDCtrlParamFromUi(const SUiPIDCtrl &m_uiPIDCtrl, SPIDCtrl &m_PIDCtrl,bool rtd)
 {
-    m_PIDCtrl.temperatureValue = CCEUIHelper::temperToResistance(m_uiPIDCtrl.temperatureValue);
-
+    if(rtd){
+        m_PIDCtrl.temperatureValue = CCEUIHelper::temperToResistance(m_uiPIDCtrl.temperatureValue);
+    }
+    else{
+        m_PIDCtrl.temperatureValue = m_uiPIDCtrl.temperatureValue * 10;
+    }
     m_PIDCtrl.timeValue = m_uiPIDCtrl.timeValue;
     m_PIDCtrl.PWMValue_Max = m_uiPIDCtrl.PWMValue_Max;
     m_PIDCtrl.PWMValue_Min = m_uiPIDCtrl.PWMValue_Min;
 }
 
-void CXATestParamSetConvertor::convertPIDCtrlParamToUi(const SPIDCtrl &m_PIDCtrl, SUiPIDCtrl &m_uiPIDCtrl)
+void CXATestParamSetConvertor::convertPIDCtrlParamToUi(const SPIDCtrl &m_PIDCtrl, SUiPIDCtrl &m_uiPIDCtrl,bool rtd)
 {
-    m_uiPIDCtrl.temperatureValue = CCEUIHelper::resistanceToTemper(m_PIDCtrl.temperatureValue);
+    if(rtd){
+        m_uiPIDCtrl.temperatureValue = CCEUIHelper::resistanceToTemper(m_PIDCtrl.temperatureValue);
+    }
+    else{
+        m_uiPIDCtrl.temperatureValue = m_PIDCtrl.temperatureValue / 10;
+    }
 
     m_uiPIDCtrl.timeValue = m_PIDCtrl.timeValue;
     m_uiPIDCtrl.PWMValue_Max = m_PIDCtrl.PWMValue_Max;
@@ -48,7 +57,7 @@ void CXATestParamSetConvertor::convertTDCtrlParamFromUi(const SUiTDCtrl &m_uiTDC
 
     for(int i = 0; i < (int)(sizeof(m_uiTDCtrl.timeCtrlArray) / sizeof(m_uiTDCtrl.timeCtrlArray[0])); ++i) {
         convertTimeCtrlFromUi(m_uiTDCtrl.timeCtrlArray[i], m_TDCtrl.timeCtrlArray[i]);
-        convertPIDCtrlParamFromUi(m_uiTDCtrl.PIDCtrlArray[i], m_TDCtrl.PIDCtrlArray[i]);
+        convertPIDCtrlParamFromUi(m_uiTDCtrl.PIDCtrlArray[i], m_TDCtrl.PIDCtrlArray[i],false);
     }
 }
 
@@ -65,7 +74,7 @@ void CXATestParamSetConvertor::convertTDCtrlParamToUi(const STDCtrl &m_TDCtrl, S
 
     for(int i = 0; i < (int)(sizeof(m_TDCtrl.timeCtrlArray) / sizeof(m_TDCtrl.timeCtrlArray[0])); ++i) {
         convertTimeCtrlToUi(m_TDCtrl.timeCtrlArray[i], m_uiTDCtrl.timeCtrlArray[i]);
-        convertPIDCtrlParamToUi(m_TDCtrl.PIDCtrlArray[i], m_uiTDCtrl.PIDCtrlArray[i]);
+        convertPIDCtrlParamToUi(m_TDCtrl.PIDCtrlArray[i], m_uiTDCtrl.PIDCtrlArray[i],false);
     }
 }
 

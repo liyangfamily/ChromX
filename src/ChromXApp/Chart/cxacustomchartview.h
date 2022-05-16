@@ -2,6 +2,7 @@
 #define CXACUSTOMCHARTVIEW_H
 
 #include <QChartView>
+#include <QPair>
 QT_CHARTS_USE_NAMESPACE
 
 class CXACustomChartView : public QChartView
@@ -29,6 +30,7 @@ private:
     bool m_ctrlPress;
     bool m_alreadySaveRange;
     double m_xMin, m_xMax, m_yMin, m_yMax;
+    QList<QPair<double,double>> m_yRangList;
     QGraphicsSimpleTextItem* m_coordItem;
     QGraphicsSimpleTextItem* m_tooltipItem =nullptr;
     QGraphicsLineItem* m_xLine = nullptr;

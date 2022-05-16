@@ -18,6 +18,7 @@
 #include <CCE_ChromXItem/CCEChromXDevice>
 #include <cxatestparamset.h>
 #include <Chart/cxachartwidget.h>
+#include <CSVHelper/cxacsvhelper.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -77,6 +78,14 @@ void MainWindow::on_btn_Connect_clicked()
 void MainWindow::on_btn_ReadTest_clicked()
 {
 #if(1)
+    CXACSVHelper test;
+    test.setColumnCount(5);
+    QList<QStringList> list;
+    test.read(list);
+    CXACSVHelper test1;
+    test1.write(list);
+#endif
+#if(0)
     CXAJsonTestParamSet test;
     test.readJsonFrom("D:/Test/1.json");
     STestParamSet data = test.testParam();

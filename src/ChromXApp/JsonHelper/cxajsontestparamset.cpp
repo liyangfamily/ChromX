@@ -719,6 +719,18 @@ void CXAJsonTestParamSet::setTestParam(const STestParamSet &value)
     m_data = value;
 }
 
+#include <QDir>
+QString CXAJsonTestParamSet::defaultFilePath()
+{
+    QString defaultFilePath = CCEUIHelper::appConfigDataLocation()+"/TestParam";
+    QDir dir(defaultFilePath);
+    if(!dir.exists()){
+        dir.mkpath(defaultFilePath);
+    }
+    defaultFilePath.append("/default.json");
+    return defaultFilePath;
+}
+
 void CXAJsonTestParamSet::resetJsonData()
 {
     m_data.clear();

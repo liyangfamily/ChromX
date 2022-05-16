@@ -34,10 +34,14 @@ private:
     CXAChartWidget * m_chart = nullptr;
 
 public slots:
+    void on_btn_Run_clicked();
+    void on_btn_Stop_clicked();
+    void on_btn_Reset_clicked();
     void on_btn_ToChart_clicked();
     void on_btn_ChartBack_clicked();
     void on_btn_PIDSetRead_clicked();
     void on_btn_SaveASDefault_clicked();
+    void on_btn_SaveAs_clicked();
     void on_btn_ImportTemplate_clicked();
 
     void on_btn_PressureRead_clicked();

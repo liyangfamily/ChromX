@@ -26,8 +26,8 @@ public:
     CXATestDataConvertor();
     void convertTestDataToUi(const STestData& m_testData, SUiTestData& m_uiTestData);
 
-    void convertTDTemperFromUi(const double& m_uiTDTemper, quint16& m_TDTemper);
-    void convertTDTemperToUi(const quint16& m_TDTemper, double& m_uiTDTemper);
+    void convertTDTemperFromUi(const double& m_uiTDTemper, quint16& m_TDTemper,bool rtd=true);
+    void convertTDTemperToUi(const quint16& m_TDTemper, double& m_uiTDTemper,bool rtd=true);
 
     void convertTITemperFromUi(const double& m_uiTITemper, quint16& m_TITemper);
     void convertTITemperToUi(const quint16& m_TITemper, double& m_uiTITemper);
