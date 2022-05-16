@@ -8,6 +8,7 @@
 #include <CCE_ChromXItem/CCEChromXDevice>
 
 #include <QtGlobal>
+#include <QSplitter>
 #include <QStringList>
 #include <QVBoxLayout>
 #include <QGridLayout>
@@ -34,8 +35,8 @@ CXAChartWidget::CXAChartWidget(EChartMode mode/* = ECM_TestData*/, QWidget *pare
     m_axisY2(new QValueAxis()),
     m_axisY(new QValueAxis()),
     m_x(0),
-    m_y(10),
-    m_y2(10),
+    m_y(1),
+    m_y2(1),
     m_chartMode(mode)
 {
     ui->setupUi(this);
@@ -108,11 +109,18 @@ void CXAChartWidget::initUI()
 
     // create main layout
     QGridLayout *mainLayout = new QGridLayout;
-    mainLayout->addLayout(m_toolBtnLayout,0,0,1,2);
-    mainLayout->addWidget(m_tableView, 1, 0);
-    mainLayout->addWidget(m_chartView, 1, 1);
-    mainLayout->setColumnStretch(1, 1);
-    mainLayout->setColumnStretch(0, 0);
+    mainLayout->addLayout(m_toolBtnLayout,0,0);
+    QSplitter* splitter = new QSplitter;
+    splitter->addWidget(m_tableView);
+    splitter->addWidget(m_chartView);
+    splitter->setChildrenCollapsible(false);
+    splitter->setStretchFactor(0,1);
+    splitter->setStretchFactor(1,2);
+    mainLayout->addWidget(splitter,1,0);
+    //mainLayout->addWidget(m_tableView, 1, 0);
+    //mainLayout->addWidget(m_chartView, 1, 1);
+    //mainLayout->setColumnStretch(1, 5);
+    //mainLayout->setColumnStretch(0, 3);
     setLayout(mainLayout);
 
     this->setLayout(mainLayout);
@@ -150,6 +158,11 @@ void CXAChartWidget::initToolButton()
     importCSVBtn->setText(tr("Import CSV"));
     connect(importCSVBtn,&QToolButton::clicked,this,&CXAChartWidget::slot_importCSV);
     m_toolBtnLayout->addWidget(importCSVBtn);
+
+    QToolButton* exportCSVBtn = new QToolButton;
+    exportCSVBtn->setText(tr("Export CSV"));
+    connect(exportCSVBtn,&QToolButton::clicked,this,&CXAChartWidget::slot_exportCSV);
+    m_toolBtnLayout->addWidget(exportCSVBtn);
 
     QToolButton* circleReadBtn = new QToolButton;
     circleReadBtn->setText(tr("Circle Read"));
@@ -420,6 +433,16 @@ void CXAChartWidget::replaceChannelData(EDataChannel channel, const QList<QPoint
     scatterSeries->replace(data);
 }
 
+void CXAChartWidget::channelData(EDataChannel channel, QList<QPointF> &data)
+{
+    SSeriesInfo* tempInfo = channelInfo(channel);
+    if(!tempInfo){
+        return;
+    }
+    QScatterSeries* scatterSeries = qobject_cast<QScatterSeries*>(tempInfo->scatterSeries);
+    data = scatterSeries->points();
+}
+
 void CXAChartWidget::updateXMax(qreal curValue,bool rightnow)
 {
     qreal dwidth= m_chart->plotArea().width()*1.5/(m_axisX->tickCount()); //一次滚动多少宽度
@@ -444,7 +467,7 @@ void CXAChartWidget::updateXMax(qreal curValue,bool rightnow)
     }
 }
 
-void CXAChartWidget::updateYMax(STestData curData,bool rightnow)
+void CXAChartWidget::updateYMax(SUiTestData curData,bool rightnow)
 {
     qreal singleStepY = m_axisY->max()/m_axisY->tickCount()/2;
     qreal maxValueY = 0;
@@ -457,7 +480,7 @@ void CXAChartWidget::updateYMax(STestData curData,bool rightnow)
     }
 }
 
-void CXAChartWidget::updateY2Max(STestData curData,bool rightnow)
+void CXAChartWidget::updateY2Max(SUiTestData curData,bool rightnow)
 {
     qreal singleStepY2 = m_axisY2->max()/m_axisY2->tickCount()/2;
     qreal maxValueY2 = 0;
@@ -503,22 +526,28 @@ void CXAChartWidget::updateY2Max(SSingleStatus curData)
 
 quint16 CXAChartWidget::handle_TestData_Read_AllInfo(const QByteArray &data)
 {
-    CCETestDataPackage_ReadAllInfo pack(data);
+    CCETestDataPackage_ReportAllInfo pack(data);
     quint16 ret = pack.isValid();
+    qDebug()<<"Event Report TestData Ret:"<<ret;
     if(ret==CCEAPI::EResult::ER_Success){
-        STestData&& data1 = pack.getInfo();
-        static unsigned int s_index = 0;
-        s_index+=2;
-        data1.curTestRunTime = s_index;
-        data1.TDCurTemperature = QRandomGenerator::global()->bounded(500);
-        data1.TICurTemperature = QRandomGenerator::global()->bounded(500);
-        data1.COLUMNTemperature = QRandomGenerator::global()->bounded(500);
-        data1.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
-        qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(data1);
+        STestData&& testData = pack.getInfo();
+//        static unsigned int s_index = 0;
+//        s_index+=2;
+//        testData.curTestRunTime = s_index;
+//        testData.TDCurTemperature = 0;
+//        testData.TICurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
+//        testData.COLUMNTemperature = QRandomGenerator::global()->bounded(0xFFFF);
+//        testData.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
+
+        SUiTestData uiTestData;
+        CXATestDataConvertor convert;
+        convert.convertTestDataToUi(testData,uiTestData);
+
+        qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(uiTestData);
         m_tableView->scrollToBottom();
 
-        updateYMax(data1);
-        updateY2Max(data1);
+        updateYMax(uiTestData);
+        updateY2Max(uiTestData);
     }
     return ret;
 }
@@ -643,48 +672,48 @@ void CXAChartWidget::slot_clearChart()
 #include <CSVHelper/cxacsvhelper.h>
 void CXAChartWidget::slot_importCSV()
 {
-    CXACSVHelper test;
-    test.setColumnCount(5);
-    QList<QStringList> list;
-    test.read(list);
-    if(!list.isEmpty()){
-        list.pop_front();
-    }
-    qobject_cast<CXATestDataTableModel*>(m_model)->clearModelData();
-    QList<QPointF> TDCurTemperaturePoints;
-    QList<QPointF> TICurTemperaturePoints;
-    QList<QPointF> COLUMNTemperaturePoints;
-    QList<QPointF> MicroPIDPoints;
-    for(auto&&item:list){
-        STestData data;
-        if(item.count()>=1){
-            data.curTestRunTime = item.at(0).toUInt();
-        }
-        if(item.count()>=3){
-            data.TDCurTemperature = item.at(2).toDouble();
-            TDCurTemperaturePoints.append(QPointF(data.curTestRunTime,data.TDCurTemperature));
-        }
-        if(item.count()>=4){
-            data.TICurTemperature = item.at(3).toDouble();
-            TICurTemperaturePoints.append(QPointF(data.curTestRunTime,data.TICurTemperature));
-        }
-        if(item.count()>=2){
-            data.COLUMNTemperature = item.at(1).toDouble();
-            COLUMNTemperaturePoints.append(QPointF(data.curTestRunTime,data.COLUMNTemperature));
-        }
-        if(item.count()>=5){
-            data.MicroPIDValue = item.at(4).toUInt();
-            MicroPIDPoints.append(QPointF(data.curTestRunTime,data.MicroPIDValue));
+    if(m_chartMode==EChartMode::ECM_TestData){
+        CXACSVHelper test;
+        QList<SUiTestData> list;
+
+        if(!test.read(list)){
+            return;
         }
 
-        updateXMax(data.curTestRunTime,false);
-        updateYMax(data,false);
-        updateY2Max(data,false);
-        QCoreApplication::processEvents(QEventLoop::AllEvents);
+        //保留原始数据到model，用于导出使用
+        qobject_cast<CXATestDataTableModel*>(m_model)->setModelData(list,true);
+
+        //采用一下方法来直接替换曲线数据可以加快绘制速率
+        QList<QPointF> TDCurTemperaturePoints;
+        QList<QPointF> TICurTemperaturePoints;
+        QList<QPointF> COLUMNTemperaturePoints;
+        QList<QPointF> MicroPIDPoints;
+        for(auto&&item:list){
+            TDCurTemperaturePoints.append(QPointF(item.curTestRunTime,item.TDCurTemperature));
+            TICurTemperaturePoints.append(QPointF(item.curTestRunTime,item.TICurTemperature));
+            COLUMNTemperaturePoints.append(QPointF(item.curTestRunTime,item.COLUMNTemperature));
+            MicroPIDPoints.append(QPointF(item.curTestRunTime,item.MicroPIDValue));
+
+            updateXMax(item.curTestRunTime,false);
+            updateYMax(item,false);
+            updateY2Max(item,false);
+            QCoreApplication::processEvents(QEventLoop::AllEvents);
+        }
+        replaceChannelData(EDataChannel::EDC_TDTemper,TDCurTemperaturePoints);
+        replaceChannelData(EDataChannel::EDC_TITemper,TICurTemperaturePoints);
+        replaceChannelData(EDataChannel::EDC_COLUMNTemper,COLUMNTemperaturePoints);
+        replaceChannelData(EDataChannel::EDC_MicroPID,MicroPIDPoints);
     }
-    replaceChannelData(EDataChannel::EDC_TDTemper,TDCurTemperaturePoints);
-    replaceChannelData(EDataChannel::EDC_TITemper,TICurTemperaturePoints);
-    replaceChannelData(EDataChannel::EDC_COLUMNTemper,COLUMNTemperaturePoints);
-    replaceChannelData(EDataChannel::EDC_MicroPID,MicroPIDPoints);
     slot_fitInView();
+}
+
+void CXAChartWidget::slot_exportCSV()
+{
+    if(m_chartMode==EChartMode::ECM_TestData){
+        CXACSVHelper test;
+
+        //从model中取出上次导入的原始数据
+        QList<SUiTestData> list =qobject_cast<CXATestDataTableModel*>(m_model)->modelData();
+        test.write(list);
+    }
 }

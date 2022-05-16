@@ -29,6 +29,53 @@ CXATestParamSet::~CXATestParamSet()
     delete ui;
 }
 
+void CXATestParamSet::on_btn_Run_clicked()
+{
+    updateJsonFromUI();
+    STestParamSet&& testParam = m_jsonTestParamSet->testParam();
+    SPIDAll& pidAll = testParam.PIDAll;
+    SRunParamSet& runParam = testParam.runParamSet;
+    SPressureMode& pressureMode = testParam.pressureMode;
+    runParam.testData_AutoRepo = 1;
+    /*SPIDALL*/
+    quint16 ret = gChromXTestParamSet.writePIDAll(pidAll);
+    ICore::showMessageCCEAPIResult(ret);
+    if(ret == CCEAPI::EResult::ER_Success){
+        ret = gChromXTestParamSet.writeRunParam(runParam);
+        ICore::showMessageCCEAPIResult(ret);
+    }
+    if(ret == CCEAPI::EResult::ER_Success){
+        ret = gChromXTestParamSet.writePressureMode(pressureMode);
+        ICore::showMessageCCEAPIResult(ret);
+    }
+    if(ret == CCEAPI::EResult::ER_Success){
+        ret = gChromXTestParamSet.writeTestStatus(1);
+        ICore::showMessageCCEAPIResult(ret);
+    }
+    m_chart->slot_clearChart();
+}
+
+void CXATestParamSet::on_btn_Stop_clicked()
+{
+    quint16 ret = gChromXTestParamSet.writeTestStatus(0);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void CXATestParamSet::on_btn_Reset_clicked()
+{
+    QFile file(CXAJsonTestParamSet::defaultFilePath());
+    QFileInfo fileInfo(file);
+    if(file.exists()){
+        m_jsonTestParamSet->readJsonFrom(CXAJsonTestParamSet::defaultFilePath());
+    }
+    else{
+        m_jsonTestParamSet->setTestParam(STestParamSet());
+        m_jsonTestParamSet->setName(fileInfo.baseName());
+        m_jsonTestParamSet->saveJsonAs(CXAJsonTestParamSet::defaultFilePath());
+    }
+    updateUIFromJson();
+}
+
 void CXATestParamSet::on_btn_ToChart_clicked()
 {
     ui->stackedWidget->setCurrentIndex(1);
@@ -45,6 +92,14 @@ void CXATestParamSet::on_btn_PIDSetRead_clicked()
 }
 
 void CXATestParamSet::on_btn_SaveASDefault_clicked()
+{
+    updateJsonFromUI();
+    QFileInfo fileInfo(CXAJsonTestParamSet::defaultFilePath());
+    m_jsonTestParamSet->setName(fileInfo.baseName());
+    m_jsonTestParamSet->saveJsonAs(CXAJsonTestParamSet::defaultFilePath());
+}
+
+void CXATestParamSet::on_btn_SaveAs_clicked()
 {
     exportTemplateFile();
 }
@@ -129,15 +184,17 @@ void CXATestParamSet::initUI()
     changeTabelShowMode(ui->tableWidgetTD,false);
     changeTabelShowMode(ui->tableWidgetTI,false);
     changeTabelShowMode(ui->tableWidgetCOLUMN,false);
+
+    on_btn_Reset_clicked();
 }
 
 void CXATestParamSet::initSignalAndSlot()
 {
-    connect(ui->comboBox_TD_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui->comboBox_TD_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),this,
          [=](int index){ changeTabelShowMode(ui->tableWidgetTD,bool(index)); });
-    connect(ui->comboBox_TI_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui->comboBox_TI_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),this,
          [=](int index){ changeTabelShowMode(ui->tableWidgetTI,bool(index)); });
-    connect(ui->comboBox_COLUMN_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui->comboBox_COLUMN_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),this,
          [=](int index){ changeTabelShowMode(ui->tableWidgetCOLUMN,bool(index)); });
 
     connect(ui->tableWidgetTD,&QTableWidget::cellChanged,this,&CXATestParamSet::tableWidgetCellChanged);
@@ -341,7 +398,10 @@ void CXATestParamSet::showTableValueFromJson(QTableWidget* table, SUiTimeCtrl* u
         table->setItem(i, ECol_PIDTimeValue, new QTableWidgetItem(QString::number(tempPIDCtrl.timeValue)));
         table->item(i, ECol_PIDTimeValue)->setTextAlignment(Qt::AlignCenter);
 
-        QString str = QString::number(tempPIDCtrl.temperatureValue, 'd', 1);
+        if(tempPIDCtrl.temperatureValue<0){
+            tempPIDCtrl.temperatureValue = 0;
+        }
+        QString str = QString::number(tempPIDCtrl.temperatureValue, 'f', 1);
         table->setItem(i, ECol_PIDTemperValue, new QTableWidgetItem(str)); //TODO: 公式计算
         table->item(i, ECol_PIDTemperValue)->setTextAlignment(Qt::AlignCenter);
 

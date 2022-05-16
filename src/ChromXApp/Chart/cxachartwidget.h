@@ -5,6 +5,9 @@
 #include <QWidget>
 #include <QtCharts/QChart>
 #include <CCE_CommunicatEngine/CCEPackageDispatcher>
+#include "TransUiValueConvertor/cxatestdataconvertor.h"
+#include "TransUiValueConvertor/cxatestparamsetconvertor.h"
+
 
 namespace Ui {
 class CXATestParamSetChart;
@@ -93,12 +96,13 @@ private:
     void setSeriesVisible(QtCharts::QAbstractSeries* obj,bool visible);
     SSeriesInfo*  channelInfo(EDataChannel channel);
     void replaceChannelData(EDataChannel channel, const QList<QPointF>& data);
+    void channelData(EDataChannel channel,QList<QPointF>& data);
 
     //更新坐标
     void updateXMax(qreal curValue,bool rightnow = true);
     //更新测试数据
-    void updateYMax(STestData curData,bool rightnow = true);
-    void updateY2Max(STestData curData,bool rightnow = true);
+    void updateYMax(SUiTestData curData,bool rightnow = true);
+    void updateY2Max(SUiTestData curData,bool rightnow = true);
     //更新单控
     void updateYMax(SSingleStatus curData);
     void updateY2Max(SSingleStatus curData);
@@ -124,6 +128,7 @@ public slots:
     void slot_checkedDynamicMode(bool checked);
     void slot_clearChart();
     void slot_importCSV();
+    void slot_exportCSV();
 };
 
 #endif // CXACHARTWIDGET_H
