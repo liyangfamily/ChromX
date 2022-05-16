@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include "TransUiValueConvertor/cxatestdataconvertor.h"
 
 class CXACSVHelper
 {
@@ -16,6 +17,12 @@ public:
     bool read(QList<QStringList>& list);
     bool write(const QList<QStringList>& list);
 
+    bool read(QList<SUiTestData>& list);
+    bool write(const QList<SUiTestData>& list);
+
+private:
+    bool openFile();
+    bool saveFile();
 private:
     int m_columnCount = 0;
     QString m_filePath;
