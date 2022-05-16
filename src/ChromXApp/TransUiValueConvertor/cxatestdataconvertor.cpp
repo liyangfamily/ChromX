@@ -7,21 +7,31 @@ CXATestDataConvertor::CXATestDataConvertor()
 
 void CXATestDataConvertor::convertTestDataToUi(const STestData &m_testData, SUiTestData &m_uiTestData)
 {
-    convertTDTemperToUi(m_testData.TDCurTemperature, m_uiTestData.TDCurTemperature);
+    convertTDTemperToUi(m_testData.TDCurTemperature, m_uiTestData.TDCurTemperature,false);
     convertTITemperToUi(m_testData.TICurTemperature, m_uiTestData.TICurTemperature);
     m_uiTestData.curTestRunTime = m_testData.curTestRunTime;
     convertCOLUMNTemperToUi(m_testData.COLUMNTemperature, m_uiTestData.COLUMNTemperature);
     convertMicroPIDValueToUi(m_testData.MicroPIDValue, m_uiTestData.MicroPIDValue);
 }
 
-void CXATestDataConvertor::convertTDTemperFromUi(const double &m_uiTDTemper, quint16 &m_TDTemper)
+void CXATestDataConvertor::convertTDTemperFromUi(const double &m_uiTDTemper, quint16 &m_TDTemper,bool rtd)
 {
-    m_TDTemper = CCEUIHelper::temperToResistance(m_uiTDTemper);
+    if(rtd){
+        m_TDTemper = CCEUIHelper::temperToResistance(m_uiTDTemper);
+    }
+    else{
+        m_TDTemper = m_uiTDTemper * 10;
+    }
 }
 
-void CXATestDataConvertor::convertTDTemperToUi(const quint16 &m_TDTemper, double &m_uiTDTemper)
+void CXATestDataConvertor::convertTDTemperToUi(const quint16 &m_TDTemper, double &m_uiTDTemper,bool rtd)
 {
-    m_uiTDTemper = CCEUIHelper::resistanceToTemper(m_TDTemper);
+    if(rtd){
+        m_uiTDTemper = CCEUIHelper::resistanceToTemper(m_TDTemper);
+    }
+    else{
+        m_uiTDTemper = m_TDTemper / 10;
+    }
 }
 
 void CXATestDataConvertor::convertTITemperFromUi(const double &m_uiTITemper, quint16 &m_TITemper)
