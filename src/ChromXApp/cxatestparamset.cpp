@@ -33,17 +33,17 @@ void CXATestParamSet::on_btn_Run_clicked()
 {
     updateJsonFromUI();
     STestParamSet&& testParam = m_jsonTestParamSet->testParam();
-    SPIDAll& pidAll = testParam.PIDAll;
+    //SPIDAll& pidAll = testParam.PIDAll;
     SRunParamSet& runParam = testParam.runParamSet;
     SPressureMode& pressureMode = testParam.pressureMode;
     runParam.testData_AutoRepo = 1;
     /*SPIDALL*/
-    quint16 ret = gChromXTestParamSet.writePIDAll(pidAll);
-    ICore::showMessageCCEAPIResult(ret);
-    if(ret == CCEAPI::EResult::ER_Success){
-        ret = gChromXTestParamSet.writeRunParam(runParam);
+   // quint16 ret = gChromXTestParamSet.writePIDAll(pidAll);
+    //ICore::showMessageCCEAPIResult(ret);
+    //if(ret == CCEAPI::EResult::ER_Success){
+     quint16 ret = gChromXTestParamSet.writeRunParam(runParam);
         ICore::showMessageCCEAPIResult(ret);
-    }
+    //}
     if(ret == CCEAPI::EResult::ER_Success){
         ret = gChromXTestParamSet.writePressureMode(pressureMode);
         ICore::showMessageCCEAPIResult(ret);
@@ -88,7 +88,53 @@ void CXATestParamSet::on_btn_ChartBack_clicked()
 
 void CXATestParamSet::on_btn_PIDSetRead_clicked()
 {
-    gChromXTestParamSet.readPIDAll();
+    quint16 ret = gChromXTestParamSet.readPIDAll();
+    ICore::showMessageCCEAPIResult(ret);
+    if(ret == CCEAPI::EResult::ER_Success){
+        SPIDAll& pidAll = gChromXTestParamSet.getPIDAll();
+
+        SUiPIDAll uiPIDAll;
+        CXATestParamSetConvertor temporary;
+        temporary.convertPIDAllParamToUi(pidAll, uiPIDAll);
+
+        //PID Settings
+        ui->doubleSpinBox_TD_P->setValue(uiPIDAll.TD_PID_P_Parma);
+        ui->doubleSpinBox_TD_I->setValue(uiPIDAll.TD_PID_I_Parma);
+        ui->doubleSpinBox_TD_D->setValue(uiPIDAll.TD_PID_D_Parma);
+
+        ui->doubleSpinBox_TI_P->setValue(uiPIDAll.TI_PID_P_Parma);
+        ui->doubleSpinBox_TI_I->setValue(uiPIDAll.TI_PID_I_Parma);
+        ui->doubleSpinBox_TI_D->setValue(uiPIDAll.TI_PID_D_Parma);
+
+        ui->doubleSpinBox_COLUMN_P->setValue(uiPIDAll.COLUMN_PID_P_Parma);
+        ui->doubleSpinBox_COLUMN_I->setValue(uiPIDAll.COLUMN_PID_I_Parma);
+        ui->doubleSpinBox_COLUMN_D->setValue(uiPIDAll.COLUMN_PID_D_Parma);
+    }
+}
+
+void CXATestParamSet::on_btn_PIDSetWrite_clicked()
+{
+     SUiPIDAll uiPIDAll;
+     //PID Settings
+     uiPIDAll.TD_PID_P_Parma = ui->doubleSpinBox_TD_P->value();
+     uiPIDAll.TD_PID_I_Parma = ui->doubleSpinBox_TD_I->value();
+     uiPIDAll.TD_PID_D_Parma = ui->doubleSpinBox_TD_D->value();
+
+     uiPIDAll.TI_PID_P_Parma = ui->doubleSpinBox_TI_P->value();
+     uiPIDAll.TI_PID_I_Parma = ui->doubleSpinBox_TI_I->value();
+     uiPIDAll.TI_PID_D_Parma = ui->doubleSpinBox_TI_D->value();
+
+     uiPIDAll.COLUMN_PID_P_Parma = ui->doubleSpinBox_COLUMN_P->value();
+     uiPIDAll.COLUMN_PID_I_Parma = ui->doubleSpinBox_COLUMN_I->value();
+     uiPIDAll.COLUMN_PID_D_Parma = ui->doubleSpinBox_COLUMN_D->value();
+
+     SPIDAll pidAll;
+     CXATestParamSetConvertor temporary;
+     temporary.convertPIDAllParamFromUi(uiPIDAll, pidAll);
+
+    /*SPIDALL*/
+    quint16 ret = gChromXTestParamSet.writePIDAll(pidAll);
+    ICore::showMessageCCEAPIResult(ret);
 }
 
 void CXATestParamSet::on_btn_SaveASDefault_clicked()
