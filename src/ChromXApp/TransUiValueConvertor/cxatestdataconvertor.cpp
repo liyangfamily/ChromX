@@ -30,7 +30,7 @@ void CXATestDataConvertor::convertTDTemperToUi(const quint16 &m_TDTemper, double
         m_uiTDTemper = CCEUIHelper::resistanceToTemper(m_TDTemper);
     }
     else{
-        m_uiTDTemper = m_TDTemper / 10;
+        m_uiTDTemper = m_TDTemper / 10.0;
     }
 }
 
