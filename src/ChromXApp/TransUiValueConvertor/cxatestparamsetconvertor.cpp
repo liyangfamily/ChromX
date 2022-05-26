@@ -36,7 +36,7 @@ void CXATestParamSetConvertor::convertPIDCtrlParamToUi(const SPIDCtrl &m_PIDCtrl
         m_uiPIDCtrl.temperatureValue = CCEUIHelper::resistanceToTemper(m_PIDCtrl.temperatureValue);
     }
     else{
-        m_uiPIDCtrl.temperatureValue = m_PIDCtrl.temperatureValue / 10;
+        m_uiPIDCtrl.temperatureValue = m_PIDCtrl.temperatureValue / 10.0;
     }
 
     m_uiPIDCtrl.timeValue = m_PIDCtrl.timeValue;
@@ -170,7 +170,8 @@ void CXATestParamSetConvertor::convertPIDAllParamToUi(const SPIDAll &m_PIDparam,
 
 void CXATestParamSetConvertor::convertRunParamSetFromUi(const SUiRunParamSet &m_uiRunParamSet, SRunParamSet &m_runParamSet)
 {
-    m_runParamSet.COLUMNFanCloseTemperature = CCEUIHelper::temperToResistance(m_uiRunParamSet.COLUMNFanCloseTemperature);
+    //m_runParamSet.COLUMNFanCloseTemperature = CCEUIHelper::temperToResistance(m_uiRunParamSet.COLUMNFanCloseTemperature);
+    m_runParamSet.COLUMNFanCloseTemperature = m_uiRunParamSet.COLUMNFanCloseTemperature * 10;
 
     m_runParamSet.cleaningTime = m_uiRunParamSet.cleaningTime;
     m_runParamSet.samplingTime = m_uiRunParamSet.samplingTime;
@@ -188,6 +189,7 @@ void CXATestParamSetConvertor::convertRunParamSetFromUi(const SUiRunParamSet &m_
 void CXATestParamSetConvertor::convertRunParamSetToUi(const SRunParamSet &m_runParamSet, SUiRunParamSet &m_uiRunParamSet)
 {
     m_uiRunParamSet.COLUMNFanCloseTemperature = CCEUIHelper::resistanceToTemper(m_runParamSet.COLUMNFanCloseTemperature);
+    m_uiRunParamSet.COLUMNFanCloseTemperature = m_runParamSet.COLUMNFanCloseTemperature / 10.0;
 
     m_uiRunParamSet.cleaningTime = m_runParamSet.cleaningTime;
     m_uiRunParamSet.samplingTime = m_runParamSet.samplingTime;
