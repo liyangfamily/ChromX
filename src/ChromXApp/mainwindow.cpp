@@ -71,6 +71,7 @@ void MainWindow::on_btn_Connect_clicked()
     }
     else{
         gChromXDetectServer.connectMainCOM(App::mainCOM);
+        ICore::showMessage(QString("Connect to %1.").arg(App::mainCOM));
         gChromXDetectServer.connectAssistCOM(App::assistCOM);
     }
 }
