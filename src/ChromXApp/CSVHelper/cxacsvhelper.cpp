@@ -98,14 +98,17 @@ bool CXACSVHelper::read(QList<SUiTestData> &list)
     QTextStream in(&file);
     in.setCodec("UTF-8");
     //遍历行
-    for(int i = 1; !in.atEnd(); ++i){
-        QString fileLine = in.readLine() ;
+    for(int i = 0; !in.atEnd(); ++i){
+        QString fileLine = in.readLine();
+        if(i == 0){
+            continue;
+        }
         tempList = fileLine.split(QLatin1Char(','), QString::KeepEmptyParts);
         tempList = tempList.mid(0,m_columnCount);
 
         SUiTestData uiTestData;
         if(tempList.count()>=1){
-            uiTestData.curTestRunTime = tempList.at(0).toUInt();
+            uiTestData.curTestRunTime = tempList.at(0).toDouble();
         }
         if(tempList.count()>=3){
             uiTestData.TDCurTemperature = tempList.at(2).toDouble();
@@ -141,7 +144,7 @@ bool CXACSVHelper::write(const QList<SUiTestData> &list)
 
         for(auto&& item:list){
             QString tempStr;
-            tempStr = QString("%1,%2,%3,%4,%5\n").arg(item.curTestRunTime)\
+            tempStr = QString("%1,%2,%3,%4,%5\n").arg(QString::number(item.curTestRunTime,'f',3))\
                     .arg(QString::number(item.COLUMNTemperature,'f',1))\
                     .arg(QString::number(item.TDCurTemperature,'f',1))\
                     .arg(QString::number(item.TICurTemperature,'f',1))\

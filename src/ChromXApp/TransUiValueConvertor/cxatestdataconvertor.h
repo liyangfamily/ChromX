@@ -6,7 +6,7 @@
 typedef struct tagUiTestData {
     double TDCurTemperature;
     double TICurTemperature;
-    quint32 curTestRunTime;
+    double curTestRunTime;
     double COLUMNTemperature;
     double MicroPIDValue;
 

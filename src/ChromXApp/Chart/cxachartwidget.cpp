@@ -184,6 +184,8 @@ void CXAChartWidget::initChart()
     //init axis
     m_axisX->setTickCount(10);
     m_axisX->setRange(0, m_defalutXMax);
+    m_axisX->setLabelFormat("%.3f");
+    m_axisX->setTitleText("time(secs)");
     m_axisY2->setTickCount(10);
     m_axisY2->setRange(0, m_y2);
     m_axisY->setTickCount(10);
@@ -254,15 +256,25 @@ void CXAChartWidget::initModel()
     //Test Code
     connect(&m_timer,&QTimer::timeout,this,[=]{
         if(m_chartMode == ECM_TestData){
-            gChromXTestData.readAllInfo(true);
-//            static unsigned int s_index = 0;
-//            s_index += 1;
-//            data.curTestRunTime = s_index;
-//            data.TDCurTemperature = QRandomGenerator::global()->bounded(500);
-//            data.TICurTemperature = QRandomGenerator::global()->bounded(500);
-//            data.COLUMNTemperature = QRandomGenerator::global()->bounded(500);
-//            data.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
-//            qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(data);
+            //gChromXTestData.readAllInfo(true);
+            STestData testData;
+            static unsigned int s_indexf = 0;
+            testData.curTestRunTime = s_indexf;
+            testData.TDCurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
+            testData.TICurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
+            testData.COLUMNTemperature = QRandomGenerator::global()->bounded(0xFFFF);
+            testData.MicroPIDValue = QRandomGenerator::global()->bounded(0xFFFFFFFF);
+            s_indexf+=1000;
+
+            SUiTestData uiTestData;
+            CXATestDataConvertor convert;
+            convert.convertTestDataToUi(testData,uiTestData);
+
+            qobject_cast<CXATestDataTableModel*>(m_model)->appendModelData(uiTestData);
+            m_tableView->scrollToBottom();
+
+            updateYMax(uiTestData);
+            updateY2Max(uiTestData);
         }else{
             SSingleStatus data;
             data.TDCurTemperature = QRandomGenerator::global()->bounded(0xFFFF);
@@ -275,7 +287,7 @@ void CXAChartWidget::initModel()
         m_tableView->scrollToBottom();
     });
     if(m_chartMode==ECM_TestData){
-        m_timer.setInterval(200);
+        m_timer.setInterval(1000);
     }
 }
 

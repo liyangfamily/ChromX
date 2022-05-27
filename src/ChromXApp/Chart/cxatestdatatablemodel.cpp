@@ -142,7 +142,7 @@ void CXATestDataTableModel::setColData(const QModelIndex &index, const QVariant 
 {
     switch(index.column()){
     case 0:
-        (*(m_data.begin()+index.row())).curTestRunTime = value.toInt();
+        (*(m_data.begin()+index.row())).curTestRunTime = value.toDouble();
         break;
     case 1:
         (*(m_data.begin()+index.row())).TDCurTemperature = value.toDouble();
@@ -165,7 +165,7 @@ QVariant CXATestDataTableModel::colData(const QModelIndex &index) const
 {
     switch(index.column()){
     case 0:
-        return (*(m_data.begin()+index.row())).curTestRunTime;
+        return QString::number((*(m_data.begin()+index.row())).curTestRunTime,'f',3); //后续界面显示保留几位小数在这里更改
     case 1:
         return (*(m_data.begin()+index.row())).TDCurTemperature;
     case 2:

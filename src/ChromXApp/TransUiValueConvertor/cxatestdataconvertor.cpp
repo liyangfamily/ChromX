@@ -9,7 +9,7 @@ void CXATestDataConvertor::convertTestDataToUi(const STestData &m_testData, SUiT
 {
     convertTDTemperToUi(m_testData.TDCurTemperature, m_uiTestData.TDCurTemperature,false);
     convertTITemperToUi(m_testData.TICurTemperature, m_uiTestData.TICurTemperature);
-    m_uiTestData.curTestRunTime = m_testData.curTestRunTime;
+    m_uiTestData.curTestRunTime = m_testData.curTestRunTime / 1000.0;
     convertCOLUMNTemperToUi(m_testData.COLUMNTemperature, m_uiTestData.COLUMNTemperature);
     convertMicroPIDValueToUi(m_testData.MicroPIDValue, m_uiTestData.MicroPIDValue);
 }
