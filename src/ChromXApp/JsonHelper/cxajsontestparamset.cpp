@@ -720,6 +720,18 @@ void CXAJsonTestParamSet::setTestParam(const STestParamSet &value)
 }
 
 #include <QDir>
+
+QString CXAJsonTestParamSet::lastUsedFilePath()
+{
+    QString lastUsedFilePath = CCEUIHelper::appConfigDataLocation()+"/TestParam";
+    QDir dir(lastUsedFilePath);
+    if(!dir.exists()){
+        dir.mkpath(lastUsedFilePath);
+    }
+    lastUsedFilePath.append("/lastUsed.json");
+    return lastUsedFilePath;
+}
+
 QString CXAJsonTestParamSet::defaultFilePath()
 {
     QString defaultFilePath = CCEUIHelper::appConfigDataLocation()+"/TestParam";
