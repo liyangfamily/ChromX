@@ -40,6 +40,7 @@ public slots:
     void on_btn_ToChart_clicked();
     void on_btn_ChartBack_clicked();
     void on_btn_PIDSetRead_clicked();
+    void on_btn_PIDSetWrite_clicked();
     void on_btn_SaveASDefault_clicked();
     void on_btn_SaveAs_clicked();
     void on_btn_ImportTemplate_clicked();
