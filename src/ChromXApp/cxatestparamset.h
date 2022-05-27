@@ -57,6 +57,8 @@ private:
     bool importTemplateFile();
     bool exportTemplateFile();
 
+    bool saveTemplateFile(QString filePath);
+
     void updateUIFromJson();
     void updateJsonFromUI();
 

@@ -17,6 +17,7 @@ public:
     //UI Param
     static QString lastOpenPath;         //上次打开的路径
     static QString lastLanguage;         //上次使用的语言
+    static QString lastOpenTestParamPath;//上次打开的测试参数路径
 
     //UI Control
     static bool enableLog;               //启用日志

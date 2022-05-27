@@ -5,6 +5,7 @@ QString App::ConfigFile = "config.ini";
 //UI Param
 QString App::lastOpenPath = "";
 QString App::lastLanguage = "";
+QString App::lastOpenTestParamPath = "";
 //UI Control
 bool App::enableLog = true;
 bool App::enableCommunicatLog = false;
@@ -23,6 +24,7 @@ void App::readConfig()
     set.beginGroup("UIParam");
     App::lastOpenPath = set.value("LastOpenPath").toString();
     App::lastLanguage = set.value("LastLanguage").toString();
+    App::lastOpenTestParamPath = set.value("LastOpenTestParamPath").toString();
     set.endGroup();
 
     set.beginGroup("UIControl");
@@ -47,6 +49,7 @@ void App::writeConfig()
     set.beginGroup("UIParam");
     set.setValue("LastOpenPath", App::lastOpenPath);
     set.setValue("LastLanguage", App::lastLanguage);
+    set.setValue("LastOpenTestParamPath", App::lastOpenTestParamPath);
     set.endGroup();
 
     set.beginGroup("UIControl");

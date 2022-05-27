@@ -53,6 +53,8 @@ void CXATestParamSet::on_btn_Run_clicked()
         ICore::showMessageCCEAPIResult(ret);
     }
     m_chart->slot_clearChart();
+
+    saveTemplateFile(CXAJsonTestParamSet::lastUsedFilePath());
 }
 
 void CXATestParamSet::on_btn_Stop_clicked()
@@ -63,16 +65,16 @@ void CXATestParamSet::on_btn_Stop_clicked()
 
 void CXATestParamSet::on_btn_Reset_clicked()
 {
-    QFile file(CXAJsonTestParamSet::defaultFilePath());
-    QFileInfo fileInfo(file);
-    if(file.exists()){
-        m_jsonTestParamSet->readJsonFrom(CXAJsonTestParamSet::defaultFilePath());
-    }
-    else{
+//    if(QFile::exists(CXAJsonTestParamSet::lastUsedFilePath())){
+//        m_jsonTestParamSet->readJsonFrom(CXAJsonTestParamSet::lastUsedFilePath());
+//    }
+//    else if(QFile::exists(CXAJsonTestParamSet::defaultFilePath())){
+//        m_jsonTestParamSet->readJsonFrom(CXAJsonTestParamSet::defaultFilePath());
+//    }
+//    else{
         m_jsonTestParamSet->setTestParam(STestParamSet());
-        m_jsonTestParamSet->setName(fileInfo.baseName());
-        m_jsonTestParamSet->saveJsonAs(CXAJsonTestParamSet::defaultFilePath());
-    }
+        //saveTemplateFile(CXAJsonTestParamSet::defaultFilePath());
+    //}
     updateUIFromJson();
 }
 
@@ -139,10 +141,7 @@ void CXATestParamSet::on_btn_PIDSetWrite_clicked()
 
 void CXATestParamSet::on_btn_SaveASDefault_clicked()
 {
-    updateJsonFromUI();
-    QFileInfo fileInfo(CXAJsonTestParamSet::defaultFilePath());
-    m_jsonTestParamSet->setName(fileInfo.baseName());
-    m_jsonTestParamSet->saveJsonAs(CXAJsonTestParamSet::defaultFilePath());
+    saveTemplateFile(CXAJsonTestParamSet::defaultFilePath());
 }
 
 void CXATestParamSet::on_btn_SaveAs_clicked()
@@ -231,7 +230,11 @@ void CXATestParamSet::initUI()
     changeTabelShowMode(ui->tableWidgetTI,false);
     changeTabelShowMode(ui->tableWidgetCOLUMN,false);
 
-    on_btn_Reset_clicked();
+    //载入上一次的配置文件
+    if(QFile::exists(CXAJsonTestParamSet::lastUsedFilePath())){
+        m_jsonTestParamSet->readJsonFrom(CXAJsonTestParamSet::lastUsedFilePath());
+    }
+    updateUIFromJson();
 }
 
 void CXATestParamSet::initSignalAndSlot()
@@ -268,6 +271,7 @@ bool CXATestParamSet::importTemplateFile()
         return false;
     }
     App::lastOpenPath = fileName;
+    App::lastOpenTestParamPath = fileName;
     App::writeConfig();
 
     if(!m_jsonTestParamSet->readJsonFrom(fileName)){
@@ -290,11 +294,22 @@ bool CXATestParamSet::exportTemplateFile()
     }
     App::lastOpenPath = fileName;
     App::writeConfig();
-    updateJsonFromUI();
-    if(!m_jsonTestParamSet->saveJsonAs(fileName)){
+
+
+    QFileInfo fileInfo(fileName);
+    ui->lineEdit_configName->setText(fileInfo.baseName());
+    if(!saveTemplateFile(fileName)){
         return false;
     }
     return true;
+}
+
+bool CXATestParamSet::saveTemplateFile(QString filePath)
+{
+    updateJsonFromUI();
+    QFileInfo fileInfo(filePath);
+    m_jsonTestParamSet->setName(fileInfo.baseName());
+    return m_jsonTestParamSet->saveJsonAs(filePath);
 }
 
 void CXATestParamSet::updateUIFromJson()
