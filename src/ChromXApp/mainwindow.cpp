@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug()<<CCEUIHelper::appName();
-    m_timer = new QTimer(this);
+
     initUI();
 }
 
@@ -230,23 +230,23 @@ void MainWindow::on_btnWritePumpVoltage_clicked()
     ICore::showMessageCCEAPIResult(ret);
 }
 
-void MainWindow::on_btnWriteSampleValve_clicked()
-{
-    quint16 ret = gChromXSingleCtrl.writeSampleValve(ui->radioBtnSampleValveON->isChecked());
-    ICore::showMessageCCEAPIResult(ret);
-}
+//void MainWindow::on_btnWriteSampleValve_clicked()
+//{
+//    quint16 ret = gChromXSingleCtrl.writeSampleValve(ui->radioBtnSampleValveON->isChecked());
+//    ICore::showMessageCCEAPIResult(ret);
+//}
 
-void MainWindow::on_btnWriteDetectValve_clicked()
-{
-    quint16 ret = gChromXSingleCtrl.writeDetectValve(ui->radioBtnDetectValveON->isChecked());
-    ICore::showMessageCCEAPIResult(ret);
-}
+//void MainWindow::on_btnWriteDetectValve_clicked()
+//{
+//    quint16 ret = gChromXSingleCtrl.writeDetectValve(ui->radioBtnDetectValveON->isChecked());
+//    ICore::showMessageCCEAPIResult(ret);
+//}
 
-void MainWindow::on_btnWriteFan_clicked()
-{
-    quint16 ret = gChromXSingleCtrl.writeFan(ui->radioBtnFanON->isChecked());
-    ICore::showMessageCCEAPIResult(ret);
-}
+//void MainWindow::on_btnWriteFan_clicked()
+//{
+//    quint16 ret = gChromXSingleCtrl.writeFan(ui->radioBtnFanON_2->isChecked());
+//    ICore::showMessageCCEAPIResult(ret);
+//}
 
 void MainWindow::on_btnWriteTDModule_clicked()
 {
@@ -281,16 +281,16 @@ void MainWindow::on_btnWriteCOLUMNModule_clicked()
     ICore::showMessageCCEAPIResult(ret);
 }
 
-void MainWindow::on_btnWriteMicroPIDModule_clicked()
-{
-    SSingleMicroPIDCtrl microPIDModule;
-    microPIDModule.biasVoltage = ui->spinBoxMicroPIDBiasVoltage->value();
-    microPIDModule.freq = ui->spinBoxMicroPIDFreq->value();
-    microPIDModule.startSwitch = ui->radioBtnMicroPIDON->isChecked();
-    quint16 ret = gChromXSingleCtrl.writeMicroPIDModule(microPIDModule.biasVoltage,
-                                                        microPIDModule.freq, microPIDModule.startSwitch);
-    ICore::showMessageCCEAPIResult(ret);
-}
+//void MainWindow::on_btnWriteMicroPIDModule_clicked()
+//{
+//    SSingleMicroPIDCtrl microPIDModule;
+//    microPIDModule.biasVoltage = ui->spinBoxMicroPIDBiasVoltage->value();
+//    microPIDModule.freq = ui->spinBoxMicroPIDFreq->value();
+//    microPIDModule.startSwitch = ui->radioBtnMicroPIDON->isChecked();
+//    quint16 ret = gChromXSingleCtrl.writeMicroPIDModule(microPIDModule.biasVoltage,
+//                                                        microPIDModule.freq, microPIDModule.startSwitch);
+//    ICore::showMessageCCEAPIResult(ret);
+//}
 
 void MainWindow::on_btnWriteEPCVoltage_clicked()
 {
@@ -298,11 +298,11 @@ void MainWindow::on_btnWriteEPCVoltage_clicked()
     ICore::showMessageCCEAPIResult(ret);
 }
 
-void MainWindow::on_btnWriteEPCSwitch_clicked()
-{
-    quint16 ret = gChromXSingleCtrl.writeEPCSwitch(ui->radioBtnEPCON->isChecked());
-    ICore::showMessageCCEAPIResult(ret);
-}
+//void MainWindow::on_btnWriteEPCSwitch_clicked()
+//{
+//    quint16 ret = gChromXSingleCtrl.writeEPCSwitch(ui->radioBtnEPCON->isChecked());
+//    ICore::showMessageCCEAPIResult(ret);
+//}
 
 void MainWindow::on_btnReadPumpVoltage_clicked()
 {
@@ -408,6 +408,138 @@ void MainWindow::on_btnReadEPCSwitch_clicked()
     if(gChromXSingleCtrl.getEPCSwitch() == 0)
         ui->radioBtnEPCOFF_Read->setChecked(true);
 }
+
+void MainWindow::on_radioBtnSampleValveON_2_clicked()
+{
+    if(!m_SVTimer->isActive()) {
+        if (ui->spinBoxSValveTime->value() == 0) {
+            quint16 ret = gChromXSingleCtrl.writeSampleValve(true);
+            ICore::showMessageCCEAPIResult(ret);
+        } else if (ui->spinBoxSValveTime->value() != 0) {
+            on_toolButton_clicked((ui->spinBoxSValveTime->value()) * 1000);
+            gChromXSingleCtrl.writeSampleValve(true);
+            m_SVTimer->start((ui->spinBoxSValveTime->value()) * 1000);
+        }
+    } else {
+        m_SVTimer->stop();
+    }
+}
+
+void MainWindow::on_radioBtnSampleValveOFF_2_clicked()
+{
+    if (m_SVTimer->isActive()) {
+        label->close();
+        m_SVTimer->stop();
+    }
+    quint16 ret = gChromXSingleCtrl.writeSampleValve(false);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnDetectValveON_2_clicked()
+{
+    if(!m_DVTimer->isActive()) {
+        if (ui->spinBoxDValveTime->value() == 0) {
+            quint16 ret = gChromXSingleCtrl.writeDetectValve(true);
+            ICore::showMessageCCEAPIResult(ret);
+        } else if (ui->spinBoxDValveTime->value() != 0) {
+            on_toolButton_clicked((ui->spinBoxDValveTime->value()) * 1000);
+            gChromXSingleCtrl.writeDetectValve(true);
+
+            m_DVTimer->start((ui->spinBoxDValveTime->value()) * 1000);
+        }
+    } else {
+        m_DVTimer->stop();
+    }
+}
+
+void MainWindow::on_radioBtnDetectValveOFF_2_clicked()
+{
+    if (m_DVTimer->isActive()) {
+        label->close();
+        m_DVTimer->stop();
+    }
+    quint16 ret = gChromXSingleCtrl.writeDetectValve(false);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnMicroPIDON_clicked()
+{
+    SSingleMicroPIDCtrl microPIDModule;
+    microPIDModule.biasVoltage = ui->spinBoxMicroPIDBiasVoltage->value();
+    microPIDModule.freq = ui->spinBoxMicroPIDFreq->value();
+    microPIDModule.startSwitch = ui->radioBtnMicroPIDON->isChecked();
+    quint16 ret = gChromXSingleCtrl.writeMicroPIDModule(microPIDModule.biasVoltage,
+                                                        microPIDModule.freq, microPIDModule.startSwitch);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnMicroPIDOFF_clicked()
+{
+    SSingleMicroPIDCtrl microPIDModule;
+    microPIDModule.biasVoltage = ui->spinBoxMicroPIDBiasVoltage->value();
+    microPIDModule.freq = ui->spinBoxMicroPIDFreq->value();
+    microPIDModule.startSwitch = ui->radioBtnMicroPIDON->isChecked();
+    quint16 ret = gChromXSingleCtrl.writeMicroPIDModule(microPIDModule.biasVoltage,
+                                                        microPIDModule.freq, microPIDModule.startSwitch);
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnEPCON_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeEPCSwitch(ui->radioBtnEPCON->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnEPCOFF_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeEPCSwitch(ui->radioBtnEPCON->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnFanON_2_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeFan(ui->radioBtnFanON_2->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+void MainWindow::on_radioBtnFanOFF_2_clicked()
+{
+    quint16 ret = gChromXSingleCtrl.writeFan(ui->radioBtnFanON_2->isChecked());
+    ICore::showMessageCCEAPIResult(ret);
+}
+
+//下面这是提示框隐藏
+void MainWindow::slotHideFinishedLabel()
+{
+    label->hide();
+    label->close();
+}
+
+void MainWindow::on_toolButton_clicked(int mTime)
+{
+    showFinished();
+    QTimer::singleShot(mTime, this, SLOT(slotHideFinishedLabel()));
+}
+
+
+//下面这个红色提示框显示
+void MainWindow::showFinished()
+{
+    QRect rect = geometry();
+    label = new QLabel;
+    label->setMaximumWidth(500);
+    label->setMaximumHeight(50);
+    label->setMinimumWidth(500);
+    label->setMinimumHeight(50);
+    QFont font;
+    font.setPointSize(25);
+    label->setFont(font);
+    label->setStyleSheet(QLatin1String("color:red;"));
+    label->setText("Auto closed when time is up!");
+    label->setGeometry(int((rect.width()-label->width())/2), int((rect.height()-label->height())/2), label->width(), label->height());
+    label->show();
+}
+
 
 //***************************************************4、单控状态单元（0x13）按钮事件***************************************************************/
 void MainWindow::on_btnReadTDTemperature_clicked()
@@ -584,5 +716,20 @@ void MainWindow::initUI()
     ui->frame_2->hide();
     ui->verticalLayout_5->addWidget(new CXAChartWidget(CXAChartWidget::ECM_SingleStatus,this));
     //this->showFullScreen();
+
+    m_timer = new QTimer(this);
+    m_SVTimer = new QTimer(this);
+    m_SVTimer->setSingleShot(true);
+    connect(m_SVTimer, &QTimer::timeout, this,
+        [=]{ quint16 ret = gChromXSingleCtrl.writeSampleValve(false);
+             ICore::showMessageCCEAPIResult(ret);
+    });
+
+    m_DVTimer = new QTimer(this);
+    m_DVTimer->setSingleShot(true);
+    connect(m_DVTimer, &QTimer::timeout, this,
+        [=]{ quint16 ret = gChromXSingleCtrl.writeDetectValve(false);
+             ICore::showMessageCCEAPIResult(ret);
+    });
 }
 
